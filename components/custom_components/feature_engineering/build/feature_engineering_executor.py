@@ -1,5 +1,4 @@
 import os
-import re
 import tensorflow as tf
 import pandas as pd
 import string
@@ -8,6 +7,7 @@ from typing_extensions import Text,Dict,List,Any
 
 from tfx.components.base.base_executor import BaseExecutor
 from tfx.types import Artifact
+from tfx.types import artifact_utils
 
 
 class FeatureEngineeringExecutor(BaseExecutor):
@@ -61,14 +61,6 @@ class FeatureEngineeringExecutor(BaseExecutor):
 
           - num_spacing_error: Counts the number of extra spaces between two words.
 
-          - num_social_media_handles: Counts the number of social media handles mentioned in the text.
-
-          - num_urls: Counts the number of urls mentioned in the text.
-
-          - num_twitter_post_url: Counts the number of twitter post url.
-
-          - num_hashtags: Counts the number of hashtags in the text.
-
           - num_space_absence_after_sentence_completion: Counts the number of instances where there is no
             space after sentence completion.
 
@@ -78,6 +70,12 @@ class FeatureEngineeringExecutor(BaseExecutor):
             first letter of the word after the sentence completion is not capitalized.
 
           - num_spelling_errors: Counts the number of mispelled words in the text.
+
+          - num_words: Counts the number of words in text.
+
+          - num_punctuations: Counts the number of punctuation marks in the text.
+
+          - num_numeric_values: counts the number of numeric value in text.
 
 
         """
@@ -113,40 +111,6 @@ class FeatureEngineeringExecutor(BaseExecutor):
             num_errors = words.count("")
 
             return num_errors
-
-        def num_social_media_handles(text: str):
-            num_handles = 0
-            words = text.split(" ")
-
-            for word in words:
-                if "@a" in word:
-                    num_handles += 1
-
-            return num_handles
-
-        def num_urls(text: str):
-            reg_exp = r'https?://\S+'
-            matches = re.findall(reg_exp, text)
-
-            num = len(matches)
-
-            return num
-
-        def num_twitter_post_urls(text: str):
-            reg_exp = r'pic.twitter.com/\S+'
-            matches = re.findall(reg_exp, text)
-
-            num = len(matches)
-
-            return num
-
-        def num_hashtags(text: str):
-            reg_exp = r'#\S+'
-            matches = re.findall(reg_exp, text)
-
-            num = len(matches)
-
-            return num
 
         def num_space_absence_after_sentence_completion(text: str):
             num_errors = 0
@@ -207,6 +171,35 @@ class FeatureEngineeringExecutor(BaseExecutor):
 
             return num_errors
 
+        def num_words(text: str):
+            words = text.split(" ")
+            num = len(words) - words.count("")
+            return num
+
+        punct = list(string.punctuation)
+
+        def num_punctuations(text: str):
+            num = 0
+            words = text.split(" ")
+
+            for word in words:
+                if any(p in word for p in punct):
+                    num += 1
+
+            return num
+
+        numeric_values = list("0123456789")
+
+        def num_numeric_values(text: str):
+            num = 0
+            words = text.split(" ")
+
+            for word in words:
+                if any(n in word for n in numeric_values):
+                    num += 1
+
+            return num
+
         data["num_single_quote_error"] = data["text"].map(
             lambda text: num_single_quote_error(text=text)
         )
@@ -214,22 +207,6 @@ class FeatureEngineeringExecutor(BaseExecutor):
         data["num_spacing_error"] = data["text"].map(
             lambda text: num_spacing_error(text=text)
 
-        )
-
-        data["num_social_media_handles"] = data["text"].map(
-            lambda text: num_social_media_handles(text=text)
-        )
-
-        data["num_urls"] = data["text"].map(
-            lambda text: num_urls(text=text)
-        )
-
-        data["num_twitter_post_urls"] = data["text"].map(
-            lambda text: num_twitter_post_urls(text=text)
-        )
-
-        data["num_hashtags"] = data["text"].map(
-            lambda text: num_hashtags(text=text)
         )
 
         data["num_space_absence_after_sentence_completion"] = data["text"].map(
@@ -247,6 +224,22 @@ class FeatureEngineeringExecutor(BaseExecutor):
         data["num_spelling_errors"] = data["text"].map(
             lambda text: num_spelling_errors(text=text)
 
+        )
+
+        data["num_words"] = data["text"].map(
+            lambda text: num_words(text=text)
+        )
+
+        data["num_punctuations"] = data["text"].map(
+            lambda text: num_punctuations(text=text)
+        )
+
+        data["num_numeric_values"] = data["text"].map(
+            lambda text: num_numeric_values(text=text)
+        )
+
+        data["text"] = data["text"].map(
+            lambda text: text.strip()
         )
 
         return data
@@ -277,22 +270,25 @@ class FeatureEngineeringExecutor(BaseExecutor):
 
         for _, row in data.iterrows():
             feature = {
-                "text": _bytes_feature(value=row["text"].encode("utf-8")),
                 "num_single_quote_error": _int64_feature(value=row["num_single_quote_error"]),
                 "num_spacing_error": _int64_feature(value=row["num_spacing_error"]),
-                "num_social_media_handles": _int64_feature(value=row["num_social_media_handles"]),
-                "num_urls": _int64_feature(value=row["num_urls"]),
-                "num_twitter_post_urls": _int64_feature(value=row["num_twitter_post_urls"]),
-                "num_hashtags": _int64_feature(value=row["num_hashtags"]),
                 "num_space_absence_after_sentence_completion": _int64_feature(
                     value=row["num_space_absence_after_sentence_completion"]),
                 "num_capitalized_words": _int64_feature(value=row["num_capitalized_words"]),
                 "num_capitalization_absence_after_sentence_completion": _int64_feature(
                     value=row["num_capitalization_absence_after_sentence_completion"]),
                 "num_spelling_errors": _int64_feature(value=row["num_spelling_errors"]),
+                "num_punctuations": _int64_feature(value=row["num_punctuations"]),
+                "num_numeric_values": _int64_feature(value=row["num_numeric_values"]),
                 "label": _bytes_feature(value=row["label"].encode("utf-8"))
 
             }
+
+            if row["text"] != '':
+                feature["text"] = _bytes_feature(value=row["text"].encode("utf-8"))
+
+            if row["num_words"] != 0:
+                feature["num_words"] = _int64_feature(value=row["num_words"])
 
             example = tf.train.Example(
                 features=tf.train.Features(feature=feature)
@@ -333,6 +329,9 @@ class FeatureEngineeringExecutor(BaseExecutor):
             tf.io.gfile.makedirs(out_data_dir)
 
             self.dataframe_to_tfrecord(data=feature_dataset, tfrecord_dir=out_data_dir)
+
+
+
 
 
 
