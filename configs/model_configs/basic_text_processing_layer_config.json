@@ -1,0 +1,44 @@
+{
+  "basic_text_processing_layer_config": {
+    "lstm_layer_config": [
+      {
+        "units":4,
+        "activation": "relu",
+        "kernel_initializer": "he_uniform",
+        "kernel_regularizer": null,
+        "return_sequences": true,
+        "bidirectional": true
+      },
+      {
+        "units":8,
+        "activation": "relu",
+        "kernel_initializer": "he_uniform",
+        "kernel_regularizer": null,
+        "return_sequences": true,
+        "bidirectional": false
+      },
+      {
+        "units":16,
+        "activation": "relu",
+        "kernel_initializer": "he_uniform",
+        "kernel_regularizer": null,
+        "return_sequences": false,
+        "bidirectional": false
+      }
+    ],
+    "dense_layer_config":[
+      {
+        "units":32,
+        "activation": "relu",
+        "kernel_initializer": "he_uniform",
+        "kernel_regularizer": null
+      },
+      {
+        "units":64,
+        "activation": "relu",
+        "kernel_initializer": "he_uniform",
+        "kernel_regularizer": null
+      }
+    ]
+  }
+}
