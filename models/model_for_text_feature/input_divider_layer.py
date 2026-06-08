@@ -10,17 +10,28 @@ class InputDividerLayer(Layer):
         super().__init__(**kwargs)
 
         self.num_models=num_models
+        self.supports_masking=True
 
 
     def call(self,x):
-        words_per_text=x.shape[1]
-        factor=words_per_text//self.num_models
-        embedding_dim=x.shape[2]
+        shape=tf.shape(x)
+
+        batch_size=shape[0]
+        words_per_text=shape[1]
+        embedding_dim=shape[2]
+
+        tf.debugging.assert_equal(
+            words_per_text % self.num_models,
+            0,
+            message="Sequence length must be divisible by num_models"
+        )
+
+        factor = words_per_text // self.num_models
 
         inputs=tf.transpose(
             tf.reshape(
                 x,
-                (-1,self.num_models,factor,embedding_dim)
+                (batch_size,self.num_models,factor,embedding_dim)
             ),
             perm=[1,0,2,3]
         )

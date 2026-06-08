@@ -1,0 +1,16 @@
+{
+  "NUMERICAL_FEATURES": [
+    "num_single_quote_error",
+    "num_spacing_error",
+    "num_space_absence_after_sentence_completion",
+    "num_capitalized_words",
+    "num_capitalization_absence_after_sentence_completion",
+    "num_spelling_errors",
+    "num_punctuations",
+    "num_numeric_values",
+    "num_words"
+  ],
+
+  "TEXT_FEATURE": "text",
+  "LABEL": "label"
+}

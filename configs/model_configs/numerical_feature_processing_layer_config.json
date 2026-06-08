@@ -1,0 +1,16 @@
+{
+  "dense_layer_config":[
+    {
+        "units":16,
+        "activation": "relu",
+        "kernel_initializer": "he_uniform",
+        "kernel_regularizer": null
+    },
+    {
+        "units":32,
+        "activation": "relu",
+        "kernel_initializer": "he_uniform",
+        "kernel_regularizer": null
+    }
+  ]
+}

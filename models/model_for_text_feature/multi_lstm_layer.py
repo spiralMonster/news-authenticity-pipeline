@@ -30,6 +30,9 @@ class MultiLSTMLayer(Layer):
         self.basic_text_processing_layers=[]
         self.dense_layers=[]
 
+        self.supports_masking=True
+        self.concat_layer=Concatenate(axis=-1)
+
 
 
         for _ in range(self.num_models):
@@ -55,11 +58,13 @@ class MultiLSTMLayer(Layer):
 
     def call(self,x):
         outputs=[]
-        for (inp,layer) in zip(x,self.basic_text_processing_layers):
+        split_inputs=tf.unstack(x, axis=0)
+
+        for (inp,layer) in zip(split_inputs,self.basic_text_processing_layers):
             x=layer(inp)
             outputs.append(x)
 
-        out=Concatenate(axis=-1)(outputs)
+        out=self.concat_layer(outputs)
 
         for layer in self.dense_layers:
             out=layer(out)
@@ -68,7 +73,7 @@ class MultiLSTMLayer(Layer):
         return out
 
     def compute_output_shape(self,input_shape):
-        last_dim=self.num_models*self.dense_layer_config[-1]["units"]
+        last_dim=self.dense_layer_config[-1]["units"]
         shape=(input_shape[0],last_dim)
 
         return shape

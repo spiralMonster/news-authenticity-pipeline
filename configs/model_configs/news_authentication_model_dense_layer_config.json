@@ -1,0 +1,49 @@
+{
+  "dense_layer_config": [
+    {
+
+      "units":128,
+      "activation": "relu",
+      "kernel_initializer": "he_uniform",
+      "kernel_regularizer": null,
+      "dropout": false,
+      "dropout_rate": null
+    },
+    {
+
+      "units":64,
+      "activation": "relu",
+      "kernel_initializer": "he_uniform",
+      "kernel_regularizer": null,
+      "dropout": true,
+      "dropout_rate": 0.2
+    },
+    {
+
+      "units":16,
+      "activation": "relu",
+      "kernel_initializer": "he_uniform",
+      "kernel_regularizer": null,
+      "dropout": true,
+      "dropout_rate": 0.15
+    },
+    {
+
+      "units":8,
+      "activation": "relu",
+      "kernel_initializer": "he_uniform",
+      "kernel_regularizer": null,
+      "dropout": false,
+      "dropout_rate": null
+    },
+    {
+
+      "units":1,
+      "activation": "sigmoid",
+      "kernel_initializer": "glorot_uniform",
+      "kernel_regularizer": null,
+      "dropout": false,
+      "dropout_rate": null
+    }
+  ]
+}
