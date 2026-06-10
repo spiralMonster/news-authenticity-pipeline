@@ -1,6 +1,7 @@
 import json
 
 import tensorflow as tf
+from kubernetes.client.models import v1_client_ip_config
 from tensorflow.keras.layers import Input
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
@@ -48,41 +49,40 @@ with open("configs/model_configs/news_authentication_model_optimizer_config.json
 
 
 
-def GetNewsAuthenticationModel():
-    numerical_inputs=[]
+def GetNewsAuthenticationModel(vocab_size:int=20000):
+    inputs={}
 
-    for feature in NUMERICAL_FEATURES:
+    for feature_name in NUMERICAL_FEATURES:
+        transformed_feature_name=transform_feature_name(feature_name)
         inp=Input(
             shape=(1,),
             dtype=tf.int64,
-            name=transform_feature_name(feature)
+            name=transformed_feature_name
+
         )
+        inputs[transformed_feature_name]=inp
 
-        numerical_inputs.append(inp)
 
 
-    text_inp=Input(
+    transform_text_feature_name=transform_feature_name("text")
+    inputs[transform_text_feature_name]=Input(
         shape=(text_model_config["text_seq_len"],),
-        dtype=tf.float32,
-        name=transform_feature_name(TEXT_FEATURE)
+        dtype=tf.int32,
+        name=transform_text_feature_name
     )
 
     #News Authentication Layer:
+    text_model_config["vocab_size"]=vocab_size
     news_auth=NewsAuthenticationLayer(
         text_processing_model_config=text_model_config,
         numerical_feature_processing_model_config=numerical_feature_processing_layer_config,
         dense_layer_config=news_authentication_model_dense_layer_config,
         name="news_authentication_layer"
-    )(
-        {
-            "numerical_inputs":numerical_inputs,
-            "text_inputs":text_inp
-        }
-    )
+    )(inputs)
 
     #Model Initialization:
     model=Model(
-        inputs=[numerical_inputs,text_inp],
+        inputs=inputs,
         outputs=news_auth
     )
 

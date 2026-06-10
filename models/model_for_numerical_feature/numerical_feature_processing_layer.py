@@ -10,7 +10,7 @@ class NumericalFeatureProcessingLayer(Layer):
         super().__init__(**kwargs)
 
         self.dense_layer_config=dense_layer_config
-        self.layers=[]
+        self.dense_layers=[]
 
         for config in self.dense_layer_config:
             layer=Dense(
@@ -20,13 +20,13 @@ class NumericalFeatureProcessingLayer(Layer):
                 kernel_regularizer=config["kernel_regularizer"]
             )
 
-            self.layers.append(layer)
+            self.dense_layers.append(layer)
 
 
     def call(self,inputs):
         x=Concatenate(axis=-1)(inputs)
 
-        for layer in self.layers:
+        for layer in self.dense_layers:
             x=layer(x)
 
 

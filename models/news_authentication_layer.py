@@ -7,6 +7,8 @@ from models.model_for_numerical_feature.numerical_feature_processing_layer impor
 
 from typing_extensions import Dict,List,Text,Any
 
+from modules.preprocessing_module import transform_feature_name
+
 
 
 class NewsAuthenticationLayer(Layer):
@@ -30,7 +32,7 @@ class NewsAuthenticationLayer(Layer):
         # Text Processing Model:
         self.text_processing_model=TextProcessingLayer(
             num_models=self.text_processing_model_config["num_models"],
-            vocab_size=self.text_processing_model_config["vocab_size"],
+            vocab_size=self.text_processing_model_config["vocab_size"]+2,
             embedding_dim=self.text_processing_model_config["embedding_dim"],
             basic_text_processing_layer_config=self.text_processing_model_config["basic_text_processing_layer_config"],
             multi_lstm_dense_layer_config=self.text_processing_model_config["multi_lstm_dense_layer_config"]
@@ -42,7 +44,7 @@ class NewsAuthenticationLayer(Layer):
         )
 
         #Dense Layers:
-        self.layers=[]
+        self.dense_layers=[]
         for config in self.dense_layer_config:
             layer = Dense(
                 units=config["units"],
@@ -54,32 +56,37 @@ class NewsAuthenticationLayer(Layer):
             if config["dropout"]:
                 dropout_layer=Dropout(config["dropout_rate"])
 
-                self.layers.append(layer)
-                self.layers.append(dropout_layer)
+                self.dense_layers.append(layer)
+                self.dense_layers.append(dropout_layer)
 
             else:
-                self.layers.append(layer)
+                self.dense_layers.append(layer)
 
 
 
-    def call(self,inputs):
-        numerical_inputs=inputs["numerical_inputs"]
-        text_inputs=inputs["text_inputs"]
+    def call(self, inputs):
+        text_feature_name=transform_feature_name("text")
+        text_input=inputs[text_feature_name]
+
+        numerical_inputs=[
+            value
+            for key,value in inputs.items()
+            if key!=text_feature_name
+        ]
 
         num_out=self.numerical_feature_processing_model(numerical_inputs)
-        text_out=self.text_processing_model(text_inputs)
+        text_out=self.text_processing_model(text_input)
+        out=Concatenate(axis=-1)([num_out, text_out])
 
-        out=Concatenate(axis=-1)([num_out,text_out])
-
-        for layer in self.layers:
+        for layer in self.dense_layers:
             out=layer(out)
-
 
         return out
 
 
+
     def compute_output_shape(self,input_shape):
-        shape=(input_shape["text_inputs"][0],self.dense_layer_config[-1]["units"])
+        shape=(input_shape[transform_feature_name("text")][0],self.dense_layer_config[-1]["units"])
 
         return shape
 

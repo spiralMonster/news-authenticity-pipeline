@@ -117,7 +117,9 @@ def preprocess_text(text):
     #Tokenize Text:
     tokenized_ids=tft.compute_and_apply_vocabulary(
         words,
-        num_oov_buckets=1
+        num_oov_buckets=1,
+        top_k=20000,
+        vocab_filename="vocab_file"
     )
 
     tokenized_ids=tokenized_ids+1

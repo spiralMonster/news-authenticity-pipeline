@@ -1,0 +1,4 @@
+{
+  "NUM_TRAIN_STEPS": 1000,
+  "NUM_EVAL_STEPS": 1000
+}
