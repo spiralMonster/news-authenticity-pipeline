@@ -1,5 +1,8 @@
+import os
 import tensorflow as tf
 import tensorflow_transform as tft
+
+from tensorflow.keras.callbacks import TensorBoard
 
 from modules.preprocessing_module import transform_feature_name
 from models.get_news_authentication_model import GetNewsAuthenticationModel
@@ -62,6 +65,13 @@ def run_fn(fn_args):
     train_dataset=input_fn(fn_args.train_files,tf_transform_output)
     val_dataset=input_fn(fn_args.eval_files,tf_transform_output)
 
+    #Tensorboard Setup:
+    log_dir_path=os.path.join(os.path.dirname(fn_args.serving_model_dir),"logs")
+    callback=TensorBoard(
+        log_dir=log_dir_path,
+        update_freq="batch"
+    )
+
     #Find Vocab Size:
     vocab_size=tf_transform_output.vocabulary_size_by_name("vocab_file")
 
@@ -73,7 +83,8 @@ def run_fn(fn_args):
         train_dataset,
         steps_per_epoch=fn_args.train_steps,
         validation_data=val_dataset,
-        validation_steps=fn_args.eval_steps
+        validation_steps=fn_args.eval_steps,
+        callbacks=[callback]
     )
 
     signatures={
