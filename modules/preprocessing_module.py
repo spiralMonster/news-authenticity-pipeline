@@ -155,14 +155,8 @@ def preprocessing_fn(inputs):
     transformed_label_feature_name=transform_feature_name(LABEL_FEATURE)
     label_inp=inputs[LABEL_FEATURE]
 
-    processed_label=tf.where(
-        tf.equal(label_inp,"fake"),
-        0,
-        1
-    )
-
     final_label=tf.cast(
-        processed_label,
+        label_inp,
         tf.int64
     )
 

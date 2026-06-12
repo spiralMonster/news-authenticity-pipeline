@@ -1,4 +1,5 @@
 from tfx.components import ImportExampleGen
+from tfx.components import M
 from tfx.proto import example_gen_pb2
 
 def DataIngestion(tfrecord_dir:str,

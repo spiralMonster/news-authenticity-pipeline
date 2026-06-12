@@ -242,6 +242,10 @@ class FeatureEngineeringExecutor(BaseExecutor):
             lambda text: text.strip()
         )
 
+        data["label"] = data["label"].map(
+            lambda v: 0 if v == "fake" else 1)
+        
+
         return data
 
     def dataframe_to_tfrecord(self, data: pd.DataFrame, tfrecord_dir: str):
@@ -280,7 +284,7 @@ class FeatureEngineeringExecutor(BaseExecutor):
                 "num_spelling_errors": _int64_feature(value=row["num_spelling_errors"]),
                 "num_punctuations": _int64_feature(value=row["num_punctuations"]),
                 "num_numeric_values": _int64_feature(value=row["num_numeric_values"]),
-                "label": _bytes_feature(value=row["label"].encode("utf-8"))
+                "label": _int64_feature(value=row["label"])
 
             }
 
@@ -329,9 +333,6 @@ class FeatureEngineeringExecutor(BaseExecutor):
             tf.io.gfile.makedirs(out_data_dir)
 
             self.dataframe_to_tfrecord(data=feature_dataset, tfrecord_dir=out_data_dir)
-
-
-
 
 
 

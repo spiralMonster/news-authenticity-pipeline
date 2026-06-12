@@ -1,0 +1,18 @@
+{
+  "BinaryAccuracy": {
+    "lower_bound": 0.90,
+    "min_change": 0.02
+  },
+  "Precision": {
+    "lower_bound": 0.80,
+    "min_change": 0.01
+  },
+  "Recall": {
+    "lower_bound": 0.80,
+    "min_change": 0.01
+  },
+  "AUC": {
+    "lower_bound": 0.75,
+    "min_change": 0.01
+  }
+}
