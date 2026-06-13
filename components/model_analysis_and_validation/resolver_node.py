@@ -11,7 +11,7 @@ def ResolverNode():
         strategy_class=LatestBlessedModelResolver,
         model=Channel(type=Model),
         model_blessing=Channel(type=ModelBlessing)
-    )
+    ).with_id('latest_blessed_model_resolver')
 
     print(f"[INFO] Latest Blessed model has been resolved.")
 
