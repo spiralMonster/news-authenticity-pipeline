@@ -1,0 +1,8 @@
+### Steps to start docker container:
+
+docker run \
+-p 8500:8500 \
+-p 8501:8501 \
+--mount type=bind,source=$(pwd)/serving_model_dir,target=/models/news_authenticator \
+-e MODEL_NAME=news_authenticator \
+-t tensorflow/serving:2.17.0

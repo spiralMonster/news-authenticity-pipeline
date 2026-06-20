@@ -1,7 +1,5 @@
 import json
-
 import tensorflow as tf
-from kubernetes.client.models import v1_client_ip_config
 from tensorflow.keras.layers import Input
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
@@ -54,22 +52,25 @@ def GetNewsAuthenticationModel(vocab_size:int=20000):
 
     for feature_name in NUMERICAL_FEATURES:
         transformed_feature_name=transform_feature_name(feature_name)
-        inp=Input(
+        inputs[transformed_feature_name]=Input(
             shape=(1,),
-            dtype=tf.int64,
+            dtype=tf.float32,
             name=transformed_feature_name
 
         )
-        inputs[transformed_feature_name]=inp
 
 
+    transformed_numerical_feature_name=[k for k in inputs.keys()]
 
-    transform_text_feature_name=transform_feature_name("text")
+
+    transform_text_feature_name=transform_feature_name(TEXT_FEATURE)
     inputs[transform_text_feature_name]=Input(
-        shape=(text_model_config["text_seq_len"],),
-        dtype=tf.int32,
-        name=transform_text_feature_name
-    )
+            shape=(text_model_config["text_seq_len"],),
+            dtype=tf.int64,
+            name=transform_text_feature_name
+        )
+
+
 
     #News Authentication Layer:
     text_model_config["vocab_size"]=vocab_size
@@ -77,6 +78,8 @@ def GetNewsAuthenticationModel(vocab_size:int=20000):
         text_processing_model_config=text_model_config,
         numerical_feature_processing_model_config=numerical_feature_processing_layer_config,
         dense_layer_config=news_authentication_model_dense_layer_config,
+        transformed_numerical_feature_name=transformed_numerical_feature_name,
+        transformed_text_feature_name=transform_text_feature_name,
         name="news_authentication_layer"
     )(inputs)
 
@@ -103,7 +106,6 @@ def GetNewsAuthenticationModel(vocab_size:int=20000):
     model.summary(expand_nested=True)
 
     return model
-
 
 
 

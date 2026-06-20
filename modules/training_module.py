@@ -1,14 +1,33 @@
 import os
+import json
+
 import tensorflow as tf
+import keras
 import tensorflow_transform as tft
+
+from tensorflow.keras.layers import Input
 
 from tensorflow.keras.callbacks import TensorBoard
 
 from modules.preprocessing_module import transform_feature_name
 from models.get_news_authentication_model import GetNewsAuthenticationModel
 
-BATCH_SIZE=32
-LABEL="label"
+#Loading Configs:
+
+with open("configs/model_configs/training_configs.json","r") as file:
+    BATCH_SIZE=json.load(file)["BATCH_SIZE"]
+
+
+with open("configs/model_configs/feature_config.json","r") as file:
+    features=json.load(file)
+
+LABEL=features["LABEL"]
+NUMERICAL_FEATURES=features["NUMERICAL_FEATURES"]
+TEXT_FEATURE=features["TEXT_FEATURE"]
+
+
+with open("configs/model_configs/text_model_config.json") as file:
+    TEXT_SEQ_LEN=json.load(file)["text_seq_len"]
 
 
 def _gzip_reader_fn(filenames):
@@ -35,22 +54,55 @@ def input_fn(file_pattern,tft_transform_output,batch_size=32):
 
     return dataset
 
+def get_serve_tf_examples_fn(model,
+                             tf_transform_output,
+                             tft_layer,
+                             text_seq_len,
+                             transformed_numerical_feature_names,
+                             transformed_text_feature_name):
 
-def get_serve_tf_examples_fn(model,tf_transform_output):
-    model.tft_layer=tf_transform_output.transform_features_layer()
-
-    @tf.function
-    def serve_tf_examples_fn(serialized_tf_examples):
-        feature_spec=tf_transform_output.raw_feature_spec()
-        feature_spec.pop(LABEL)
+    @tf.function(input_signature=[tf.TensorSpec(shape=[None],dtype=tf.string,name="examples")])
+    def serve_tf_examples_fn(serialized_tf_example):
+        feature_spec=tf_transform_output.raw_feature_spec().copy()
+        feature_spec.pop(LABEL,None)
 
         parsed_features=tf.io.parse_example(
-            serialized_tf_examples,
+            serialized_tf_example,
             feature_spec
         )
 
-        transformed_features=model.tft_layer(parsed_features)
-        outputs=model(transformed_features)
+        transformed_features=tft_layer(parsed_features)
+
+        model_inputs={}
+
+        for feat in transformed_numerical_feature_names:
+            tensor=transformed_features[feat]
+
+            if isinstance(tensor,tf.SparseTensor):
+                default_val=tf.constant(0,dtype=tf.float32)
+                tensor=tf.sparse.to_dense(tensor,default_value=default_val)
+
+
+            tensor=tf.cast(tensor,tf.float32)
+            tensor=tf.reshape(tensor,[-1,1])
+            tensor=tf.ensure_shape(tensor,[None,1])
+
+            model_inputs[feat]=tensor
+
+        text_feat=transformed_text_feature_name
+        text_tensor=transformed_features[text_feat]
+
+        if isinstance(text_tensor,tf.SparseTensor):
+            default_val=tf.constant(0,dtype=tf.int64)
+            text_tensor=tf.sparse.to_dense(text_tensor,default_value=default_val)
+
+        text_tensor=tf.cast(text_tensor,tf.int64)
+        text_tensor=tf.reshape(text_tensor,[-1,text_seq_len])
+        text_tensor=tf.ensure_shape(text_tensor,[None,text_seq_len])
+
+        model_inputs[text_feat]=text_tensor
+
+        outputs=model(model_inputs)
 
         return {"outputs":outputs}
 
@@ -59,6 +111,8 @@ def get_serve_tf_examples_fn(model,tf_transform_output):
 
 
 def run_fn(fn_args):
+    tf.keras.backend.clear_session()
+
     tf_transform_output=tft.TFTransformOutput(fn_args.transform_output)
 
     #Loading Dataset:
@@ -87,24 +141,29 @@ def run_fn(fn_args):
         callbacks=[callback]
     )
 
-    signatures={
-        'serving_default':
-            get_serve_tf_examples_fn(
-                model,
-                tf_transform_output
-            ).get_concrete_function(
-                tf.TensorSpec(
-                    shape=[None],
-                    dtype=tf.string,
-                    name='examples'
-                )
-            )
-    }
 
-    #Saving Model:
-    tf.saved_model.save(
-        model,
-        fn_args.serving_model_dir,
-        signatures=signatures
+    #Exporting Model:
+    transformed_numerical_feature_names=[transform_feature_name(feat) for feat in NUMERICAL_FEATURES]
+    transformed_text_feature_name=transform_feature_name(TEXT_FEATURE)
+
+    tft_layer=tf_transform_output.transform_features_layer()
+    serve_fn=get_serve_tf_examples_fn(
+        model=model,
+        tf_transform_output=tf_transform_output,
+        tft_layer=tft_layer,
+        text_seq_len=TEXT_SEQ_LEN,
+        transformed_numerical_feature_names=transformed_numerical_feature_names,
+        transformed_text_feature_name=transformed_text_feature_name
     )
 
+    # These are the exact lines that solved the most tedious bug. The bug took almost 5 days to be solved.
+    export_archive = keras.export.ExportArchive()
+    export_archive.track(model)
+    export_archive.track(tft_layer)
+
+    export_archive.add_endpoint(
+        name="serving_default",
+        fn=serve_fn,
+    )
+
+    export_archive.write_out(fn_args.serving_model_dir)

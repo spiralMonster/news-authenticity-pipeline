@@ -1,9 +1,13 @@
+import tensorflow as tf
+from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Layer
 from tensorflow.keras.layers import LSTM,Dense,Bidirectional
 
 from typing_extensions import List,Dict
 
 
+
+@tf.keras.utils.register_keras_serializable()
 class BasicTextProcessingLayer(Layer):
     """
     Basic Network of LSTM and Dense layers to process the text.
@@ -18,13 +22,15 @@ class BasicTextProcessingLayer(Layer):
 
         super().__init__(**kwargs)
 
+        self.supports_masking = True
+
         self.lstm_layer_config=lstm_layer_config
         self.dense_layer_config=dense_layer_config
 
         self.lstm_layers=[]
         self.dense_layers=[]
 
-        for config in self.lstm_layer_config:
+        for ind,config in enumerate(self.lstm_layer_config):
             if config["bidirectional"]:
                 layer=Bidirectional(
                     LSTM(
@@ -33,7 +39,9 @@ class BasicTextProcessingLayer(Layer):
                         kernel_initializer=config["kernel_initializer"],
                         kernel_regularizer=config["kernel_regularizer"],
                         return_sequences=config["return_sequences"]
-                    )
+
+                    ),
+                    name=f"basic_text_processing_layer_bidi_{ind}"
                 )
 
 
@@ -43,19 +51,22 @@ class BasicTextProcessingLayer(Layer):
                         activation=config["activation"],
                         kernel_initializer=config["kernel_initializer"],
                         kernel_regularizer=config["kernel_regularizer"],
-                        return_sequences=config["return_sequences"]
+                        return_sequences=config["return_sequences"],
+                        name=f"basic_text_processing_layer_lstm_{ind}"
+
                 )
 
 
             self.lstm_layers.append(layer)
 
 
-        for config in self.dense_layer_config:
+        for ind,config in enumerate(self.dense_layer_config):
             layer=Dense(
                         units=config["units"],
                         activation=config["activation"],
                         kernel_initializer=config["kernel_initializer"],
-                        kernel_regularizer=config["kernel_regularizer"]
+                        kernel_regularizer=config["kernel_regularizer"],
+                        name=f"basic_text_processing_layer_dense_{ind}"
                 )
 
             self.dense_layers.append(layer)
@@ -67,6 +78,7 @@ class BasicTextProcessingLayer(Layer):
 
         for layer in self.dense_layers:
             x=layer(x)
+
 
         return x
 
