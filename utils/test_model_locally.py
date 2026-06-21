@@ -1,7 +1,7 @@
 import tensorflow as tf
 import os
 
-EXPORT_DIR = "serving_model_dir"
+EXPORT_DIR = "../serving_model_dir"
 EXPORT_DIR=os.path.join(EXPORT_DIR,os.listdir(EXPORT_DIR)[0])
 
 loaded = tf.saved_model.load(EXPORT_DIR)

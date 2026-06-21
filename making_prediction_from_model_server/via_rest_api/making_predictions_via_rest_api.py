@@ -23,6 +23,7 @@ def MakePredictions(text:str,port=8501,model_name="news_authenticator"):
         ]
     }
     response=requests.post(url,json=payload)
+    response=response.json()
 
     return response
 

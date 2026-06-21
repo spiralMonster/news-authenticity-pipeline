@@ -1,0 +1,7 @@
+docker run \
+-p 8500:8500 \
+-p 8501:8501 \
+--mount type=bind,source=$(pwd)/tflite_model_dir,target=/models/news_authenticator_tflite \
+-e MODEL_NAME=news_authenticator_tflite \
+-t tensorflow/serving:2.17.0 \
+--prefer_tflite_model=true

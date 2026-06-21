@@ -1,9 +1,6 @@
 import os
-from utils.get_final_dataset import GetFinalDataset
-from utils.convert_data_to_tfrecords import ConvertDataToTFRecords
 
-from models.get_news_authentication_model import GetNewsAuthenticationModel
-from making_prediction_from_model_server.making_predictions_via_rest_api import MakePredictions
+from making_prediction_from_model_server.via_grpc.making_predictions_via_grpc import MakePredictions
 
 DATA_DIR=os.path.join(os.getcwd(),"data")
 
@@ -29,6 +26,26 @@ DATA_DIR=os.path.join(os.getcwd(),"data")
 text="""
 Hey, this is my project and  I AM EPEBBFEF nfrn,n exciyed abmbfe   ,fhkehkjmejhksh swnm,I  cmenv
 """
-response=MakePredictions(text=text)
+# # response=MakePredictions(text=text)
+# #
+# # print(response.json())
+#
+#
+#
+# result=MakePredictions(text=text)
+#
+# print(result)
 
-print(response.json())
+
+# from making_prediction_from_model_server.via_grpc.get_model_metadata import GetModelMetaData
+#
+# metadata=GetModelMetaData()
+#
+# print(metadata)
+
+
+# from utils.convert_model_to_tflite import ConvertModelToTFlite
+#
+# ConvertModelToTFlite()
+
+

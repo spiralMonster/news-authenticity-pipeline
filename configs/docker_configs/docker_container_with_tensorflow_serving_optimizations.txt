@@ -1,0 +1,20 @@
+docker run \
+-p 8500:8500 \
+-p 8501:8501 \
+--mount type=bind,source=$(pwd)/serving_model_dir,target=/models/news_authenticator \
+-e MODEL_NAME=news_authenticator \
+-t tensorflow/serving:2.17.0 \
+--tensorflow_intra_op_parallelism=4 \      # Number of Cores
+--tensorflow_inter_op_parallelism=4 \      # Number of Threads
+--file_system_poll_wait_seconds=10
+
+
+
+docker run \
+-p 8500:8500 \
+-p 8501:8501 \
+--mount type=bind,source=$(pwd)/serving_model_dir,target=/models/news_authenticator \
+-e MODEL_NAME=news_authenticator \
+-t tensorflow/serving:2.17.0 \
+--tensorflow_session_parallelism=4 \    # Number of Threads
+--file_system_poll_wait_seconds=10

@@ -1,5 +1,6 @@
 .env
 serving_model_dir/
+tflite_model_dir/
 .idea/
 .ipynb_checkpoints
 .venv/
@@ -11,3 +12,5 @@ models/model_for_numerical_feature/__pycache__/
 models/model_for_text_feature/__pycache__/
 components/custom_components/null_data_remover/.ipynb_checkpoints/
 making_prediction_from_model_server/__pycache__/
+making_prediction_from_model_server/via_rest_api/__pycache__/
+making_prediction_from_model_server/via_grpc/__pycache__/
