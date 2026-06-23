@@ -1,6 +1,1 @@
-{
-  "num_models": 6,
-  "vocab_size": 20000,
-  "embedding_dim": 64,
-  "text_seq_len": 360
-}
+{"num_models": 6, "vocab_size": 20000, "embedding_dim": 64, "text_seq_len": 360}

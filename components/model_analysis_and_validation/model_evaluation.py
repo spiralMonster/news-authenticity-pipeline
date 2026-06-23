@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 import tensorflow_model_analysis as tfma
 from tensorflow_model_analysis.proto import config_pb2
@@ -7,7 +8,7 @@ from tensorflow_model_analysis.proto import config_pb2
 from tfx.components import Evaluator
 from tfx.components import Trainer
 from tfx.dsl.components.common.resolver import Resolver
-from components.custom_components.null_data_remover.build.null_data_remover_component import NullDataRemover
+from components.custom_components.data_cleaner.build.data_cleaner_component import DataCleaner
 
 #Load Evaluation Config:
 with open("configs/model_configs/model_evaluation_config.json","r") as file:
@@ -15,10 +16,12 @@ with open("configs/model_configs/model_evaluation_config.json","r") as file:
 
 
 def ModelEvaluator(
-        example_gen:NullDataRemover,
+        example_gen:DataCleaner,
         model_trainer:Trainer,
         model_resolver:Resolver
 ):
+    print(f"[{datetime.now()}] [START] Model Evaluator Component.")
+
     eval_config = tfma.EvalConfig(
         model_specs=[
             tfma.ModelSpec(label_key="label")
@@ -93,7 +96,7 @@ def ModelEvaluator(
         example_splits=["test"]
     )
 
-    print(f"[INFO] Model Evaluated.")
+    print(f"[{datetime.now()}] [END] Model Evaluator Component.")
 
     return model_evaluator
 

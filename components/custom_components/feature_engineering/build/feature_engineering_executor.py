@@ -314,7 +314,7 @@ class FeatureEngineeringExecutor(BaseExecutor):
         inp_val_tfrecord_dir = artifact_utils.get_split_uri(input_dict["examples"], "eval")
         inp_test_tfrecord_dir = artifact_utils.get_split_uri(input_dict["examples"], "test")
 
-        output_artifact = output_dict["feature_engineered_examples"][0]
+        output_artifact = output_dict["feature_engineered_examples"][-1]
         output_artifact.split_names = artifact_utils.encode_split_names(["train", "eval", "test"])
 
         out_train_tfrecord_dir = artifact_utils.get_split_uri(output_dict["feature_engineered_examples"], "train")
@@ -325,7 +325,7 @@ class FeatureEngineeringExecutor(BaseExecutor):
         output_data_dirs = [out_train_tfrecord_dir, out_val_tfrecord_dir, out_test_tfrecord_dir]
 
         for (inp_data_dir, out_data_dir) in zip(input_data_dirs, output_data_dirs):
-            inp_tfrecord_path = os.path.join(inp_data_dir, os.listdir(inp_data_dir)[0])
+            inp_tfrecord_path = os.path.join(inp_data_dir, os.listdir(inp_data_dir)[-1])
 
             dataset = self.convert_tfrecord_to_dataframe(tfrecord_file=inp_tfrecord_path)
             feature_dataset = self.generate_features(data=dataset)

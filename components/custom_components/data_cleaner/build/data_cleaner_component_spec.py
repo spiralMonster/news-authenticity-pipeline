@@ -4,9 +4,9 @@ from tfx.types.component_spec import ExecutionParameter
 from tfx.types.standard_artifacts import Examples
 
 
-class NullDataRemoverComponentSpec(ComponentSpec):
+class DataCleanerComponentSpec(ComponentSpec):
     """
-    Component Spec for Null Data Remover.
+    Component Spec for Data Cleaning.
     """
 
     INPUTS = {

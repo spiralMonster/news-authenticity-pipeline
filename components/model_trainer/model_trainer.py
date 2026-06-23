@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 import json
 
 from tfx.components import Trainer
@@ -17,6 +18,8 @@ with open("configs/model_configs/training_configs.json","r") as file:
 
 
 def ModelTrainer(transform_gen:Transform,updated_schema_gen:SchemaUpdater):
+    print(f"[{datetime.now()}] [START] Model Trainer Component.")
+
     trainer=Trainer(
         module_file=os.path.abspath("modules/training_module.py"),
         custom_executor_spec=ExecutorClassSpec(GenericExecutor),
@@ -27,6 +30,6 @@ def ModelTrainer(transform_gen:Transform,updated_schema_gen:SchemaUpdater):
         eval_args=trainer_pb2.EvalArgs(num_steps=training_args["NUM_EVAL_STEPS"])
     )
 
-    print(f"[INFO] Model Trained.")
+    print(f"[{datetime.now()}] [END] Model Trainer Component.")
 
     return trainer

@@ -1,4 +1,5 @@
 import os
+import json
 import pandas as pd
 import tensorflow as tf
 
@@ -9,9 +10,9 @@ from tfx.types.standard_artifacts import Artifact
 from tfx.types import artifact_utils
 
 
-class NullDataRemoverExecutor(BaseExecutor):
+class DataCleanerExecutor(BaseExecutor):
     """
-    Executor for custom NullDataRemoverComponent
+    Executor for custom Data Cleaner Component
     """
 
     def convert_tfrecord_to_datframe(self, tfrecord_dir: str):
@@ -144,7 +145,7 @@ class NullDataRemoverExecutor(BaseExecutor):
         inp_val_dir = artifact_utils.get_split_uri(input_dict["feature_engineered_examples"], "eval")
         inp_test_dir = artifact_utils.get_split_uri(input_dict["feature_engineered_examples"], "test")
 
-        output_artifact = output_dict["preprocessed_examples"][0]
+        output_artifact = output_dict["preprocessed_examples"][-1]
         output_artifact.split_names = artifact_utils.encode_split_names(["train", "eval", "test"])
 
         out_train_dir = artifact_utils.get_split_uri(output_dict["preprocessed_examples"], "train")
@@ -154,12 +155,23 @@ class NullDataRemoverExecutor(BaseExecutor):
         input_dirs = [inp_train_dir, inp_val_dir, inp_test_dir]
         output_dirs = [out_train_dir, out_val_dir, out_test_dir]
 
+        number_of_examples={}
+
         for (inp_dir, out_dir) in zip(input_dirs, output_dirs):
             dataset = self.convert_tfrecord_to_datframe(tfrecord_dir=inp_dir)
             dataset = self.remove_null_values_from_dataset(dataset=dataset)
 
+            split_name=inp_dir.split("/")[-1]
+            number_of_examples[f"number_of_examples_in_{split_name}_data"]=len(dataset)
+
             tf.io.gfile.makedirs(out_dir)
             self.dataframe_to_tfrecord(data=dataset, tfrecord_dir=out_dir)
+
+
+        with open("configs/model_configs/number_of_examples.json","w") as file:
+            json.dump(number_of_examples,file)
+
+        print("[INFO] Number of examples in each split logged")
 
 
 

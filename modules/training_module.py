@@ -116,6 +116,7 @@ def run_fn(fn_args):
     tf_transform_output=tft.TFTransformOutput(fn_args.transform_output)
 
     #Loading Dataset:
+    print(f"[INFO] Loading Dataset...")
     train_dataset=input_fn(fn_args.train_files,tf_transform_output)
     val_dataset=input_fn(fn_args.eval_files,tf_transform_output)
 
@@ -130,10 +131,12 @@ def run_fn(fn_args):
     vocab_size=tf_transform_output.vocabulary_size_by_name("vocab_file")
 
     #Loading Model:
+    print(f"[INFO] Initializing Model...")
     model=GetNewsAuthenticationModel(vocab_size=vocab_size)
 
     #Training Model:
-    model.fit(
+    print("Training Model...")
+    history=model.fit(
         train_dataset,
         steps_per_epoch=fn_args.train_steps,
         validation_data=val_dataset,
@@ -141,8 +144,32 @@ def run_fn(fn_args):
         callbacks=[callback]
     )
 
+    #Logging Training Details:
+    print(f"[INFO] Logging Training Details...")
+    training_details={}
+
+    training_loss=history.history["loss"]
+    training_details["avg_training_loss"]=round(sum(training_loss)/len(training_loss),2)
+
+    validation_loss=history.history["val_loss"]
+    training_details["avg_validation_loss"]=round(sum(validation_loss)/len(validation_loss),2)
+
+    training_accuracy=history.history["accuracy"]
+    training_details["avg_training_accuracy"]=round(sum(training_accuracy)/len(training_accuracy),2)
+
+    validation_accuracy=history.history["val_accuracy"]
+    training_details["avg_validation_accuracy"]=round(sum(validation_accuracy)/len(validation_accuracy),2)
+
+    with open("configs/model_configs/training_details.json","w") as file:
+        json.dump(training_details,file)
+
+
+    print("Training Details: ")
+    print(training_details)
+
 
     #Exporting Model:
+    print(f"[INFO] Exporting Model...")
     transformed_numerical_feature_names=[transform_feature_name(feat) for feat in NUMERICAL_FEATURES]
     transformed_text_feature_name=transform_feature_name(TEXT_FEATURE)
 

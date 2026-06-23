@@ -20,8 +20,8 @@ class SchemaUpdaterExecutor(BaseExecutor):
     ):
         self._log_startup(input_dict, output_dict, exec_properties)
 
-        schema_dir = input_dict["schema"][0].uri
-        schema_location = os.path.join(schema_dir, os.listdir(schema_dir)[0])
+        schema_dir = input_dict["schema"][-1].uri
+        schema_location = os.path.join(schema_dir, os.listdir(schema_dir)[-1])
 
         schema = tfdv.load_schema_text(schema_location)
 
@@ -31,7 +31,7 @@ class SchemaUpdaterExecutor(BaseExecutor):
             feature = tfdv.get_feature(schema, feat)
             feature.presence.min_fraction = param_value
 
-        output_dir = output_dict["updated_schema"][0].uri
+        output_dir = output_dict["updated_schema"][-1].uri
         tf.io.gfile.makedirs(output_dir)
 
         tfdv.write_schema_text(

@@ -4,17 +4,17 @@ from tfx.types import channel_utils
 from tfx.types import artifact_utils
 from tfx.types.standard_artifacts import Examples
 
-from components.custom_components.null_data_remover.build.null_data_remover_component_spec import NullDataRemoverComponentSpec
-from components.custom_components.null_data_remover.build.null_data_remover_executor import NullDataRemoverExecutor
+from components.custom_components.data_cleaner.build.data_cleaner_component_spec import DataCleanerComponentSpec
+from components.custom_components.data_cleaner.build.data_cleaner_executor import DataCleanerExecutor
 
 
-class NullDataRemover(BaseComponent):
+class DataCleaner(BaseComponent):
     """
-    Custom Component of NullDataRemover
+    Custom Component of Data Cleaner
     """
 
-    SPEC_CLASS = NullDataRemoverComponentSpec
-    EXECUTOR_SPEC = ExecutorClassSpec(NullDataRemoverExecutor)
+    SPEC_CLASS = DataCleanerComponentSpec
+    EXECUTOR_SPEC = ExecutorClassSpec(DataCleanerExecutor)
 
     def __init__(self, feature_engineered_examples, preprocessed_examples=None):
         if not preprocessed_examples:
@@ -23,9 +23,9 @@ class NullDataRemover(BaseComponent):
 
             preprocessed_examples = channel_utils.as_channel([artifact])
 
-        spec = NullDataRemoverComponentSpec(
+        spec = DataCleanerComponentSpec(
             feature_engineered_examples=feature_engineered_examples,
             preprocessed_examples=preprocessed_examples
         )
 
-        super(NullDataRemover, self).__init__(spec=spec)
+        super(DataCleaner, self).__init__(spec=spec)

@@ -1,11 +1,14 @@
+from datetime import datetime
+
 from tfx.components import ImportExampleGen
-from tfx.components import M
 from tfx.proto import example_gen_pb2
 
 def DataIngestion(tfrecord_dir:str,
                   train_ratio:float =0.6,
                   eval_ratio:float=0.2,
                   test_ratio:float=0.2):
+
+    print(f"[{datetime.now()}] [START] Data Ingestion Component.")
 
     output_config=example_gen_pb2.Output(
         split_config=example_gen_pb2.SplitConfig(
@@ -32,6 +35,6 @@ def DataIngestion(tfrecord_dir:str,
         output_config=output_config
     )
 
-    print(f"[INFO] Data Ingested.")
+    print(f"[{datetime.now()}] [END] Data Ingestion Component.")
 
     return example_gen

@@ -1,8 +1,8 @@
 import os
 
-from making_prediction_from_model_server.via_grpc.making_predictions_via_grpc import MakePredictions
 
-DATA_DIR=os.path.join(os.getcwd(),"data")
+
+# DATA_DIR=os.path.join(os.getcwd(),"data")
 
 # TRUE_NEWS_DATA_PATH=os.path.join(DATA_DIR,"True.csv")
 # FAKE_NEWS_DATA_PATH=os.path.join(DATA_DIR,"Fake.csv")
@@ -23,12 +23,13 @@ DATA_DIR=os.path.join(os.getcwd(),"data")
 # GetNewsAuthenticationModel()
 
 
-text="""
-Hey, this is my project and  I AM EPEBBFEF nfrn,n exciyed abmbfe   ,fhkehkjmejhksh swnm,I  cmenv
-"""
-# # response=MakePredictions(text=text)
-# #
-# # print(response.json())
+# from making_prediction_from_model_server.via_rest_api.making_predictions_via_rest_api import MakePredictions
+# text="""
+# Hey, this is my project and  I AM EPEBBFEF nfrn,n exciyed abmbfe   ,fhkehkjmejhksh swnm,I  cmenv
+# """
+# response=MakePredictions(text=text)
+#
+# print(response)
 #
 #
 #
@@ -47,5 +48,18 @@ Hey, this is my project and  I AM EPEBBFEF nfrn,n exciyed abmbfe   ,fhkehkjmejhk
 # from utils.convert_model_to_tflite import ConvertModelToTFlite
 #
 # ConvertModelToTFlite()
+
+
+# import time
+# from datetime import datetime
+#
+# print(datetime.now())
+
+
+from models.get_news_authentication_model import GetNewsAuthenticationModel
+
+GetNewsAuthenticationModel(vocab_size=10)
+
+
 
 
