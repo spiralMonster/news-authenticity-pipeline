@@ -11,17 +11,22 @@ from tfx.proto import trainer_pb2
 
 from components.custom_components.schema_updater.update_schema import SchemaUpdater
 
-#Loading Training Args:
-with open("configs/model_configs/training_configs.json","r") as file:
-    training_args=json.load(file)
 
 
+def ModelTrainer(transform_gen:Transform,
+                 updated_schema_gen:SchemaUpdater,
+                 module_file:str,
+                 training_args_path:str
+                 ):
 
-def ModelTrainer(transform_gen:Transform,updated_schema_gen:SchemaUpdater):
     print(f"[{datetime.now()}] [START] Model Trainer Component.")
 
+    print(f"[INFO] Loading Training Args.")
+    with open(training_args_path,"r") as file:
+        training_args=json.load(file)
+
     trainer=Trainer(
-        module_file=os.path.abspath("modules/training_module.py"),
+        module_file=os.path.abspath(module_file),
         custom_executor_spec=ExecutorClassSpec(GenericExecutor),
         transformed_examples=transform_gen.outputs["transformed_examples"],
         transform_graph=transform_gen.outputs["transform_graph"],

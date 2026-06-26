@@ -1,4 +1,3 @@
-import os
 from datetime import datetime
 
 from tfx.proto import pusher_pb2
@@ -11,10 +10,10 @@ from components.custom_components.human_evaluator.build.human_evaluator_componen
 
 def ModelPusher(
         model_trainer:Trainer,
-        human_evaluator:HumanEvaluator
+        human_evaluator:HumanEvaluator,
+        serving_dir:str
 ):
     print(f"[{datetime.now()}] [START] Model Pusher Component.")
-    serving_dir=os.environ["MODEL_SERVING_DIR"]
 
     model_pusher=Pusher(
         model=model_trainer.outputs["model"],

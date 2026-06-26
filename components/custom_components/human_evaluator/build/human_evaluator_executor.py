@@ -117,7 +117,7 @@ class HumanEvaluatorExecutor(BaseExecutor):
              - Number of Validation Steps: {training_config['NUM_EVAL_STEPS']}
              - Optimizer: Adam
              - Learning Rate: {optimizer_config['learning_rate']}
-             - Loss Function: Categorical Cross Entropy
+             - Loss Function: Binary Cross Entropy
 
 
             Training Performance:

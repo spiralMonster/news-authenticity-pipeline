@@ -1,0 +1,67 @@
+## Run Airflow Pipeline
+
+Step 1: Set Airflow Home Path in '.bashrc' file:
+```
+nano ~/.bashrc
+export AIRFLOW_HOME=$HOME/Projects/news_authenticator_end_to_end_pipeline/airflow
+source ~/.bashrc
+
+```
+
+Step 2: Initialize Airflow Database:
+```
+airflow db migrate
+
+```
+
+Step 3: Create the pipeline file that returns DAG object:
+```
+cd airflow
+mkdir dags
+cd dags
+touch news_authentication_pipeline.py
+
+```
+
+Step 4: Run Airflow Scheduler:
+```
+airflow scheduler
+
+```
+
+Step 5: Check for the created pipeline:
+```
+airflow dags list
+
+```
+
+Step 6: If created pipeline is not listed then check for the errors using:
+```
+airflow dags list-import-errors
+
+```
+
+Step 7: If created pipeline is identified by Airflow then create Airflow User:
+```
+airflow users create \
+--username spiral \
+--password 12345678 \
+--firstname spiral \
+--lastname monstre \
+--role Admin \
+--email spiralmonster6996@gmail.com
+
+```
+
+
+Step 8: Start Airflow WebServer:
+```
+airflow webserver -p 8081
+
+```
+
+Step 9: Open Airflow Dashboard on the Browser:
+- login using created user
+- locate the created pipeline
+- run the pipeline
+

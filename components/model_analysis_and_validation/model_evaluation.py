@@ -10,17 +10,20 @@ from tfx.components import Trainer
 from tfx.dsl.components.common.resolver import Resolver
 from components.custom_components.data_cleaner.build.data_cleaner_component import DataCleaner
 
-#Load Evaluation Config:
-with open("configs/model_configs/model_evaluation_config.json","r") as file:
-    evaluation_config=json.load(file)
 
 
 def ModelEvaluator(
         example_gen:DataCleaner,
         model_trainer:Trainer,
-        model_resolver:Resolver
+        model_resolver:Resolver,
+        evaluation_config_path:str
 ):
     print(f"[{datetime.now()}] [START] Model Evaluator Component.")
+
+    print(f"[INFO] Loading Evaluation Config.")
+    with open(evaluation_config_path,"r") as file:
+        evaluation_config=json.load(file)
+
 
     eval_config = tfma.EvalConfig(
         model_specs=[
