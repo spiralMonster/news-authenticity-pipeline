@@ -1,8 +1,12 @@
 import os
+from dotenv import load_dotenv
+
 from tfx.orchestration.beam.beam_dag_runner import BeamDagRunner
 
 from pipelines.init_components import InitComponents
 from pipelines.apache_beam_pipeline.init_pipeline import InitBeamPipeline
+
+load_dotenv()
 
 
 data_dir="data"
@@ -13,6 +17,9 @@ pipeline_root="pipeline_run_beam"
 requirements_file="requirements.txt"
 metadata_path=os.path.join(pipeline_root,"metadata.sqlite")
 
+serving_dir=os.environ["MODEL_SERVING_DIR"]
+
+
 
 def RunBeamPipeline(direct_num_workers:int=1):
     print(f"[START] News Authentication Apache Beam Pipeline.")
@@ -20,7 +27,8 @@ def RunBeamPipeline(direct_num_workers:int=1):
     components=InitComponents(
         data_dir=data_dir,
         module_dir=module_dir,
-        config_dir=config_dir
+        config_dir=config_dir,
+        serving_dir=serving_dir
     )
 
     print(f"[INFO] Creating Beam Pipeline Arguments")

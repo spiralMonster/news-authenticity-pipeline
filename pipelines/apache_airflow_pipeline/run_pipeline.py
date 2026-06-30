@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 from pathlib import Path
 from datetime import datetime
 
@@ -7,6 +8,8 @@ from tfx.orchestration.airflow.airflow_dag_runner import AirflowPipelineConfig
 
 from pipelines.init_components import InitComponents
 from pipelines.apache_airflow_pipeline.init_pipeline import InitAirflowPipeline
+
+load_dotenv()
 
 
 PROJECT_ROOT=Path(__file__).resolve().parents[2]
@@ -17,6 +20,8 @@ config_dir=PROJECT_ROOT/"configs"
 
 pipeline_root=str(PROJECT_ROOT/"pipeline_run_airflow")
 metadata_path=os.path.join(pipeline_root,"metadata.sqlite")
+
+serving_dir=os.environ["MODEL_SERVING_DIR"]
 
 
 def RunAirflowPipeline(direct_num_workers=1):
@@ -41,7 +46,8 @@ def RunAirflowPipeline(direct_num_workers=1):
     components=InitComponents(
         data_dir=data_dir,
         module_dir=module_dir,
-        config_dir=config_dir
+        config_dir=config_dir,
+        serving_dir=serving_dir
     )
 
     print(f"[INFO] Initializing Pipeline.")

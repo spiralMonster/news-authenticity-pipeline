@@ -10,6 +10,7 @@ tflite_model_dir/
 data/
 pipeline_run_beam/
 pipeline_run_airflow/
+kubeflow_persistent_volume/
 utils/__pycache__/
 modules/__pycache__/
 models/__pycache__/
@@ -31,3 +32,4 @@ components/custom_components/human_evaluator/__pycache__/
 pipelines/__pycache__/
 pipelines/apache_airflow_pipeline/__pycache__/
 pipelines/apache_beam_pipeline/__pycache__/
+pipelines/kubeflow_pipeline/__pycache__/

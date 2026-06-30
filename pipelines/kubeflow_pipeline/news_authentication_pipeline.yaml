@@ -1,0 +1,1008 @@
+components:
+  DataCleaner:
+    executorLabel: DataCleaner_executor
+    inputDefinitions:
+      artifacts:
+        feature_engineered_examples:
+          artifactType:
+            instanceSchema: "title: tfx.Examples\ntype: object\nproperties:\n  span:\n\
+              \    type: integer\n    description: Span for an artifact.\n  version:\n\
+              \    type: integer\n    description: Version for an artifact.\n  split_names:\n\
+              \    type: string\n    description: JSON-encoded list of splits for\
+              \ an artifact. Empty string means artifact has no split.\n"
+    outputDefinitions:
+      artifacts:
+        preprocessed_examples:
+          artifactType:
+            instanceSchema: "title: tfx.Examples\ntype: object\nproperties:\n  span:\n\
+              \    type: integer\n    description: Span for an artifact.\n  version:\n\
+              \    type: integer\n    description: Version for an artifact.\n  split_names:\n\
+              \    type: string\n    description: JSON-encoded list of splits for\
+              \ an artifact. Empty string means artifact has no split.\n"
+  Evaluator:
+    executorLabel: Evaluator_executor
+    inputDefinitions:
+      artifacts:
+        examples:
+          artifactType:
+            instanceSchema: "title: tfx.Examples\ntype: object\nproperties:\n  span:\n\
+              \    type: integer\n    description: Span for an artifact.\n  version:\n\
+              \    type: integer\n    description: Version for an artifact.\n  split_names:\n\
+              \    type: string\n    description: JSON-encoded list of splits for\
+              \ an artifact. Empty string means artifact has no split.\n"
+        model:
+          artifactType:
+            instanceSchema: 'title: tfx.Model
+
+              type: object
+
+              '
+      parameters:
+        eval_config:
+          type: STRING
+        example_splits:
+          type: STRING
+        fairness_indicator_thresholds:
+          type: STRING
+    outputDefinitions:
+      artifacts:
+        blessing:
+          artifactType:
+            instanceSchema: 'title: tfx.ModelBlessing
+
+              type: object
+
+              '
+        evaluation:
+          artifactType:
+            instanceSchema: 'title: tfx.ModelEvaluation
+
+              type: object
+
+              '
+  ExampleValidator:
+    executorLabel: ExampleValidator_executor
+    inputDefinitions:
+      artifacts:
+        schema:
+          artifactType:
+            instanceSchema: 'title: tfx.Schema
+
+              type: object
+
+              '
+        statistics:
+          artifactType:
+            instanceSchema: "title: tfx.ExampleStatistics\ntype: object\nproperties:\n\
+              \  span:\n    type: integer\n    description: Span for an artifact.\n\
+              \  split_names:\n    type: string\n    description: JSON-encoded list\
+              \ of splits for an artifact. Empty string means artifact has no split.\n"
+      parameters:
+        exclude_splits:
+          type: STRING
+    outputDefinitions:
+      artifacts:
+        anomalies:
+          artifactType:
+            instanceSchema: "title: tfx.ExampleAnomalies\ntype: object\nproperties:\n\
+              \  span:\n    type: integer\n    description: Span for an artifact.\n\
+              \  split_names:\n    type: string\n    description: JSON-encoded list\
+              \ of splits for an artifact. Empty string means artifact has no split.\n"
+  FeatureEngineeringComponent:
+    executorLabel: FeatureEngineeringComponent_executor
+    inputDefinitions:
+      artifacts:
+        examples:
+          artifactType:
+            instanceSchema: "title: tfx.Examples\ntype: object\nproperties:\n  span:\n\
+              \    type: integer\n    description: Span for an artifact.\n  version:\n\
+              \    type: integer\n    description: Version for an artifact.\n  split_names:\n\
+              \    type: string\n    description: JSON-encoded list of splits for\
+              \ an artifact. Empty string means artifact has no split.\n"
+    outputDefinitions:
+      artifacts:
+        feature_engineered_examples:
+          artifactType:
+            instanceSchema: "title: tfx.Examples\ntype: object\nproperties:\n  span:\n\
+              \    type: integer\n    description: Span for an artifact.\n  version:\n\
+              \    type: integer\n    description: Version for an artifact.\n  split_names:\n\
+              \    type: string\n    description: JSON-encoded list of splits for\
+              \ an artifact. Empty string means artifact has no split.\n"
+  HumanEvaluator:
+    executorLabel: HumanEvaluator_executor
+    inputDefinitions:
+      artifacts:
+        model_blessing:
+          artifactType:
+            instanceSchema: 'title: tfx.ModelBlessing
+
+              type: object
+
+              '
+        model_evaluation:
+          artifactType:
+            instanceSchema: 'title: tfx.ModelEvaluation
+
+              type: object
+
+              '
+      parameters:
+        human_evaluator_email_id:
+          type: STRING
+        num_retries:
+          type: INT
+        waiting_time:
+          type: INT
+    outputDefinitions:
+      artifacts:
+        human_evaluator_blessing:
+          artifactType:
+            instanceSchema: 'title: tfx.ModelBlessing
+
+              type: object
+
+              '
+  ImportExampleGen:
+    executorLabel: ImportExampleGen_executor
+    inputDefinitions:
+      parameters:
+        input_base:
+          type: STRING
+        input_config:
+          type: STRING
+        output_config:
+          type: STRING
+        output_data_format:
+          type: INT
+        output_file_format:
+          type: INT
+    outputDefinitions:
+      artifacts:
+        examples:
+          artifactType:
+            instanceSchema: "title: tfx.Examples\ntype: object\nproperties:\n  span:\n\
+              \    type: integer\n    description: Span for an artifact.\n  version:\n\
+              \    type: integer\n    description: Version for an artifact.\n  split_names:\n\
+              \    type: string\n    description: JSON-encoded list of splits for\
+              \ an artifact. Empty string means artifact has no split.\n"
+  Pusher:
+    executorLabel: Pusher_executor
+    inputDefinitions:
+      artifacts:
+        model:
+          artifactType:
+            instanceSchema: 'title: tfx.Model
+
+              type: object
+
+              '
+        model_blessing:
+          artifactType:
+            instanceSchema: 'title: tfx.ModelBlessing
+
+              type: object
+
+              '
+      parameters:
+        custom_config:
+          type: STRING
+        push_destination:
+          type: STRING
+    outputDefinitions:
+      artifacts:
+        pushed_model:
+          artifactType:
+            instanceSchema: 'title: tfx.PushedModel
+
+              type: object
+
+              '
+  SchemaGen:
+    executorLabel: SchemaGen_executor
+    inputDefinitions:
+      artifacts:
+        statistics:
+          artifactType:
+            instanceSchema: "title: tfx.ExampleStatistics\ntype: object\nproperties:\n\
+              \  span:\n    type: integer\n    description: Span for an artifact.\n\
+              \  split_names:\n    type: string\n    description: JSON-encoded list\
+              \ of splits for an artifact. Empty string means artifact has no split.\n"
+      parameters:
+        exclude_splits:
+          type: STRING
+        infer_feature_shape:
+          type: INT
+    outputDefinitions:
+      artifacts:
+        schema:
+          artifactType:
+            instanceSchema: 'title: tfx.Schema
+
+              type: object
+
+              '
+  SchemaUpdater:
+    executorLabel: SchemaUpdater_executor
+    inputDefinitions:
+      artifacts:
+        schema:
+          artifactType:
+            instanceSchema: 'title: tfx.Schema
+
+              type: object
+
+              '
+      parameters:
+        updating_params:
+          type: STRING
+    outputDefinitions:
+      artifacts:
+        updated_schema:
+          artifactType:
+            instanceSchema: 'title: tfx.Schema
+
+              type: object
+
+              '
+  StatisticsGen:
+    executorLabel: StatisticsGen_executor
+    inputDefinitions:
+      artifacts:
+        examples:
+          artifactType:
+            instanceSchema: "title: tfx.Examples\ntype: object\nproperties:\n  span:\n\
+              \    type: integer\n    description: Span for an artifact.\n  version:\n\
+              \    type: integer\n    description: Version for an artifact.\n  split_names:\n\
+              \    type: string\n    description: JSON-encoded list of splits for\
+              \ an artifact. Empty string means artifact has no split.\n"
+      parameters:
+        exclude_splits:
+          type: STRING
+    outputDefinitions:
+      artifacts:
+        statistics:
+          artifactType:
+            instanceSchema: "title: tfx.ExampleStatistics\ntype: object\nproperties:\n\
+              \  span:\n    type: integer\n    description: Span for an artifact.\n\
+              \  split_names:\n    type: string\n    description: JSON-encoded list\
+              \ of splits for an artifact. Empty string means artifact has no split.\n"
+  Trainer:
+    executorLabel: Trainer_executor
+    inputDefinitions:
+      artifacts:
+        examples:
+          artifactType:
+            instanceSchema: "title: tfx.Examples\ntype: object\nproperties:\n  span:\n\
+              \    type: integer\n    description: Span for an artifact.\n  version:\n\
+              \    type: integer\n    description: Version for an artifact.\n  split_names:\n\
+              \    type: string\n    description: JSON-encoded list of splits for\
+              \ an artifact. Empty string means artifact has no split.\n"
+        schema:
+          artifactType:
+            instanceSchema: 'title: tfx.Schema
+
+              type: object
+
+              '
+        transform_graph:
+          artifactType:
+            instanceSchema: 'title: tfx.TransformGraph
+
+              type: object
+
+              '
+      parameters:
+        custom_config:
+          type: STRING
+        eval_args:
+          type: STRING
+        module_path:
+          type: STRING
+        train_args:
+          type: STRING
+    outputDefinitions:
+      artifacts:
+        model:
+          artifactType:
+            instanceSchema: 'title: tfx.Model
+
+              type: object
+
+              '
+        model_run:
+          artifactType:
+            instanceSchema: 'title: tfx.ModelRun
+
+              type: object
+
+              '
+  Transform:
+    executorLabel: Transform_executor
+    inputDefinitions:
+      artifacts:
+        examples:
+          artifactType:
+            instanceSchema: "title: tfx.Examples\ntype: object\nproperties:\n  span:\n\
+              \    type: integer\n    description: Span for an artifact.\n  version:\n\
+              \    type: integer\n    description: Version for an artifact.\n  split_names:\n\
+              \    type: string\n    description: JSON-encoded list of splits for\
+              \ an artifact. Empty string means artifact has no split.\n"
+        schema:
+          artifactType:
+            instanceSchema: 'title: tfx.Schema
+
+              type: object
+
+              '
+      parameters:
+        custom_config:
+          type: STRING
+        disable_statistics:
+          type: INT
+        force_tf_compat_v1:
+          type: INT
+        module_path:
+          type: STRING
+    outputDefinitions:
+      artifacts:
+        post_transform_anomalies:
+          artifactType:
+            instanceSchema: "title: tfx.ExampleAnomalies\ntype: object\nproperties:\n\
+              \  span:\n    type: integer\n    description: Span for an artifact.\n\
+              \  split_names:\n    type: string\n    description: JSON-encoded list\
+              \ of splits for an artifact. Empty string means artifact has no split.\n"
+        post_transform_schema:
+          artifactType:
+            instanceSchema: 'title: tfx.Schema
+
+              type: object
+
+              '
+        post_transform_stats:
+          artifactType:
+            instanceSchema: "title: tfx.ExampleStatistics\ntype: object\nproperties:\n\
+              \  span:\n    type: integer\n    description: Span for an artifact.\n\
+              \  split_names:\n    type: string\n    description: JSON-encoded list\
+              \ of splits for an artifact. Empty string means artifact has no split.\n"
+        pre_transform_schema:
+          artifactType:
+            instanceSchema: 'title: tfx.Schema
+
+              type: object
+
+              '
+        pre_transform_stats:
+          artifactType:
+            instanceSchema: "title: tfx.ExampleStatistics\ntype: object\nproperties:\n\
+              \  span:\n    type: integer\n    description: Span for an artifact.\n\
+              \  split_names:\n    type: string\n    description: JSON-encoded list\
+              \ of splits for an artifact. Empty string means artifact has no split.\n"
+        transform_graph:
+          artifactType:
+            instanceSchema: 'title: tfx.TransformGraph
+
+              type: object
+
+              '
+        transformed_examples:
+          artifactType:
+            instanceSchema: "title: tfx.Examples\ntype: object\nproperties:\n  span:\n\
+              \    type: integer\n    description: Span for an artifact.\n  version:\n\
+              \    type: integer\n    description: Version for an artifact.\n  split_names:\n\
+              \    type: string\n    description: JSON-encoded list of splits for\
+              \ an artifact. Empty string means artifact has no split.\n"
+        updated_analyzer_cache:
+          artifactType:
+            instanceSchema: 'title: tfx.TransformCache
+
+              type: object
+
+              '
+deploymentSpec:
+  executors:
+    DataCleaner_executor:
+      container:
+        args:
+        - --executor_class_path
+        - components.custom_components.data_cleaner.build.data_cleaner_executor.DataCleanerExecutor
+        - --json_serialized_invocation_args
+        - '{{$}}'
+        - --direct_number_workers=0
+        command:
+        - python
+        - -m
+        - tfx.orchestration.kubeflow.v2.container.kubeflow_v2_run_executor
+        image: docker.io/spiralmonster/tfx:news_authentication_pipeline
+        volumeMounts:
+        - name: kubeflow-pv
+          mountPath: /kubeflow_persistent_volume
+      volumes:
+      - name: kubeflow-pv
+        persistentVolumeClaim:
+          claimName: kubeflow-pvc
+    Evaluator_executor:
+      container:
+        args:
+        - --executor_class_path
+        - tfx.components.evaluator.executor.Executor
+        - --json_serialized_invocation_args
+        - '{{$}}'
+        - --direct_number_workers=0
+        command:
+        - python
+        - -m
+        - tfx.orchestration.kubeflow.v2.container.kubeflow_v2_run_executor
+        image: docker.io/spiralmonster/tfx:news_authentication_pipeline
+        volumeMounts:
+        - name: kubeflow-pv
+          mountPath: /kubeflow_persistent_volume
+      volumes:
+      - name: kubeflow-pv
+        persistentVolumeClaim:
+          claimName: kubeflow-pvc
+    ExampleValidator_executor:
+      container:
+        args:
+        - --executor_class_path
+        - tfx.components.example_validator.executor.Executor
+        - --json_serialized_invocation_args
+        - '{{$}}'
+        - --direct_number_workers=0
+        command:
+        - python
+        - -m
+        - tfx.orchestration.kubeflow.v2.container.kubeflow_v2_run_executor
+        image: docker.io/spiralmonster/tfx:news_authentication_pipeline
+        volumeMounts:
+        - name: kubeflow-pv
+          mountPath: /kubeflow_persistent_volume
+      volumes:
+      - name: kubeflow-pv
+        persistentVolumeClaim:
+          claimName: kubeflow-pvc
+    FeatureEngineeringComponent_executor:
+      container:
+        args:
+        - --executor_class_path
+        - components.custom_components.feature_engineering.build.feature_engineering_executor.FeatureEngineeringExecutor
+        - --json_serialized_invocation_args
+        - '{{$}}'
+        - --direct_number_workers=0
+        command:
+        - python
+        - -m
+        - tfx.orchestration.kubeflow.v2.container.kubeflow_v2_run_executor
+        image: docker.io/spiralmonster/tfx:news_authentication_pipeline
+        volumeMounts:
+        - name: kubeflow-pv
+          mountPath: /kubeflow_persistent_volume
+      volumes:
+      - name: kubeflow-pv
+        persistentVolumeClaim:
+          claimName: kubeflow-pvc
+    HumanEvaluator_executor:
+      container:
+        args:
+        - --executor_class_path
+        - components.custom_components.human_evaluator.build.human_evaluator_executor.HumanEvaluatorExecutor
+        - --json_serialized_invocation_args
+        - '{{$}}'
+        - --direct_number_workers=0
+        command:
+        - python
+        - -m
+        - tfx.orchestration.kubeflow.v2.container.kubeflow_v2_run_executor
+        image: docker.io/spiralmonster/tfx:news_authentication_pipeline
+        volumeMounts:
+        - name: kubeflow-pv
+          mountPath: /kubeflow_persistent_volume
+      volumes:
+      - name: kubeflow-pv
+        persistentVolumeClaim:
+          claimName: kubeflow-pvc
+    ImportExampleGen_executor:
+      container:
+        args:
+        - --executor_class_path
+        - tfx.components.example_gen.import_example_gen.executor.Executor
+        - --json_serialized_invocation_args
+        - '{{$}}'
+        - --direct_number_workers=0
+        command:
+        - python
+        - -m
+        - tfx.orchestration.kubeflow.v2.container.kubeflow_v2_run_executor
+        image: docker.io/spiralmonster/tfx:news_authentication_pipeline
+        lifecycle:
+          preCacheCheck:
+            args:
+            - --json_serialized_invocation_args
+            - '{{$}}'
+            - --direct_number_workers=0
+            command:
+            - python
+            - -m
+            - tfx.orchestration.kubeflow.v2.file_based_example_gen.driver
+        volumeMounts:
+        - name: kubeflow-pv
+          mountPath: /kubeflow_persistent_volume
+      volumes:
+      - name: kubeflow-pv
+        persistentVolumeClaim:
+          claimName: kubeflow-pvc
+    Pusher_executor:
+      container:
+        args:
+        - --executor_class_path
+        - tfx.components.pusher.executor.Executor
+        - --json_serialized_invocation_args
+        - '{{$}}'
+        - --direct_number_workers=0
+        command:
+        - python
+        - -m
+        - tfx.orchestration.kubeflow.v2.container.kubeflow_v2_run_executor
+        image: docker.io/spiralmonster/tfx:news_authentication_pipeline
+        volumeMounts:
+        - name: kubeflow-pv
+          mountPath: /kubeflow_persistent_volume
+      volumes:
+      - name: kubeflow-pv
+        persistentVolumeClaim:
+          claimName: kubeflow-pvc
+    SchemaGen_executor:
+      container:
+        args:
+        - --executor_class_path
+        - tfx.components.schema_gen.executor.Executor
+        - --json_serialized_invocation_args
+        - '{{$}}'
+        - --direct_number_workers=0
+        command:
+        - python
+        - -m
+        - tfx.orchestration.kubeflow.v2.container.kubeflow_v2_run_executor
+        image: docker.io/spiralmonster/tfx:news_authentication_pipeline
+        volumeMounts:
+        - name: kubeflow-pv
+          mountPath: /kubeflow_persistent_volume
+      volumes:
+      - name: kubeflow-pv
+        persistentVolumeClaim:
+          claimName: kubeflow-pvc
+    SchemaUpdater_executor:
+      container:
+        args:
+        - --executor_class_path
+        - components.custom_components.schema_updater.build.schema_updater_executor.SchemaUpdaterExecutor
+        - --json_serialized_invocation_args
+        - '{{$}}'
+        - --direct_number_workers=0
+        command:
+        - python
+        - -m
+        - tfx.orchestration.kubeflow.v2.container.kubeflow_v2_run_executor
+        image: docker.io/spiralmonster/tfx:news_authentication_pipeline
+        volumeMounts:
+        - name: kubeflow-pv
+          mountPath: /kubeflow_persistent_volume
+      volumes:
+      - name: kubeflow-pv
+        persistentVolumeClaim:
+          claimName: kubeflow-pvc
+    StatisticsGen_executor:
+      container:
+        args:
+        - --executor_class_path
+        - tfx.components.statistics_gen.executor.Executor
+        - --json_serialized_invocation_args
+        - '{{$}}'
+        - --direct_number_workers=0
+        command:
+        - python
+        - -m
+        - tfx.orchestration.kubeflow.v2.container.kubeflow_v2_run_executor
+        image: docker.io/spiralmonster/tfx:news_authentication_pipeline
+        volumeMounts:
+        - name: kubeflow-pv
+          mountPath: /kubeflow_persistent_volume
+      volumes:
+      - name: kubeflow-pv
+        persistentVolumeClaim:
+          claimName: kubeflow-pvc
+    Trainer_executor:
+      container:
+        args:
+        - --executor_class_path
+        - tfx.components.trainer.executor.GenericExecutor
+        - --json_serialized_invocation_args
+        - '{{$}}'
+        - --direct_number_workers=0
+        command:
+        - python
+        - -m
+        - tfx.orchestration.kubeflow.v2.container.kubeflow_v2_run_executor
+        image: docker.io/spiralmonster/tfx:news_authentication_pipeline
+        volumeMounts:
+        - name: kubeflow-pv
+          mountPath: /kubeflow_persistent_volume
+      volumes:
+      - name: kubeflow-pv
+        persistentVolumeClaim:
+          claimName: kubeflow-pvc
+    Transform_executor:
+      container:
+        args:
+        - --executor_class_path
+        - tfx.components.transform.executor.Executor
+        - --json_serialized_invocation_args
+        - '{{$}}'
+        - --direct_number_workers=0
+        command:
+        - python
+        - -m
+        - tfx.orchestration.kubeflow.v2.container.kubeflow_v2_run_executor
+        image: docker.io/spiralmonster/tfx:news_authentication_pipeline
+        volumeMounts:
+        - name: kubeflow-pv
+          mountPath: /kubeflow_persistent_volume
+      volumes:
+      - name: kubeflow-pv
+        persistentVolumeClaim:
+          claimName: kubeflow-pvc
+pipelineInfo:
+  name: news-authentication-pipeline
+root:
+  dag:
+    tasks:
+      DataCleaner:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: DataCleaner
+        dependentTasks:
+        - FeatureEngineeringComponent
+        inputs:
+          artifacts:
+            feature_engineered_examples:
+              taskOutputArtifact:
+                outputArtifactKey: feature_engineered_examples
+                producerTask: FeatureEngineeringComponent
+        taskInfo:
+          name: DataCleaner
+      Evaluator:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: Evaluator
+        dependentTasks:
+        - DataCleaner
+        - Trainer
+        inputs:
+          artifacts:
+            examples:
+              taskOutputArtifact:
+                outputArtifactKey: preprocessed_examples
+                producerTask: DataCleaner
+            model:
+              taskOutputArtifact:
+                outputArtifactKey: model
+                producerTask: Trainer
+          parameters:
+            eval_config:
+              runtimeValue:
+                constantValue:
+                  stringValue: "{\n  \"metrics_specs\": [\n    {\n      \"metrics\"\
+                    : [\n        {\n          \"class_name\": \"BinaryAccuracy\",\n\
+                    \          \"threshold\": {\n            \"change_threshold\"\
+                    : {\n              \"absolute\": 0.02,\n              \"direction\"\
+                    : \"HIGHER_IS_BETTER\"\n            },\n            \"value_threshold\"\
+                    : {\n              \"lower_bound\": 0.9\n            }\n     \
+                    \     }\n        },\n        {\n          \"class_name\": \"Precision\"\
+                    ,\n          \"threshold\": {\n            \"change_threshold\"\
+                    : {\n              \"absolute\": 0.01,\n              \"direction\"\
+                    : \"HIGHER_IS_BETTER\"\n            },\n            \"value_threshold\"\
+                    : {\n              \"lower_bound\": 0.8\n            }\n     \
+                    \     }\n        },\n        {\n          \"class_name\": \"Recall\"\
+                    ,\n          \"threshold\": {\n            \"change_threshold\"\
+                    : {\n              \"absolute\": 0.01,\n              \"direction\"\
+                    : \"HIGHER_IS_BETTER\"\n            },\n            \"value_threshold\"\
+                    : {\n              \"lower_bound\": 0.8\n            }\n     \
+                    \     }\n        },\n        {\n          \"class_name\": \"AUC\"\
+                    ,\n          \"threshold\": {\n            \"change_threshold\"\
+                    : {\n              \"absolute\": 0.01,\n              \"direction\"\
+                    : \"HIGHER_IS_BETTER\"\n            },\n            \"value_threshold\"\
+                    : {\n              \"lower_bound\": 0.75\n            }\n    \
+                    \      }\n        }\n      ]\n    }\n  ],\n  \"model_specs\":\
+                    \ [\n    {\n      \"label_key\": \"label\"\n    }\n  ],\n  \"\
+                    slicing_specs\": [\n    {}\n  ]\n}"
+            example_splits:
+              runtimeValue:
+                constantValue:
+                  stringValue: '["test"]'
+            fairness_indicator_thresholds:
+              runtimeValue:
+                constantValue:
+                  stringValue: 'null'
+        taskInfo:
+          name: Evaluator
+      ExampleValidator:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: ExampleValidator
+        dependentTasks:
+        - SchemaUpdater
+        - StatisticsGen
+        inputs:
+          artifacts:
+            schema:
+              taskOutputArtifact:
+                outputArtifactKey: updated_schema
+                producerTask: SchemaUpdater
+            statistics:
+              taskOutputArtifact:
+                outputArtifactKey: statistics
+                producerTask: StatisticsGen
+          parameters:
+            exclude_splits:
+              runtimeValue:
+                constantValue:
+                  stringValue: '[]'
+        taskInfo:
+          name: ExampleValidator
+      FeatureEngineeringComponent:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: FeatureEngineeringComponent
+        dependentTasks:
+        - ImportExampleGen
+        inputs:
+          artifacts:
+            examples:
+              taskOutputArtifact:
+                outputArtifactKey: examples
+                producerTask: ImportExampleGen
+        taskInfo:
+          name: FeatureEngineeringComponent
+      HumanEvaluator:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: HumanEvaluator
+        dependentTasks:
+        - Evaluator
+        inputs:
+          artifacts:
+            model_blessing:
+              taskOutputArtifact:
+                outputArtifactKey: blessing
+                producerTask: Evaluator
+            model_evaluation:
+              taskOutputArtifact:
+                outputArtifactKey: evaluation
+                producerTask: Evaluator
+          parameters:
+            human_evaluator_email_id:
+              runtimeValue:
+                constantValue:
+                  stringValue: lightningsword104@gmail.com
+            num_retries:
+              runtimeValue:
+                constantValue:
+                  intValue: '3'
+            waiting_time:
+              runtimeValue:
+                constantValue:
+                  intValue: '120'
+        taskInfo:
+          name: HumanEvaluator
+      ImportExampleGen:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: ImportExampleGen
+        inputs:
+          parameters:
+            input_base:
+              runtimeValue:
+                constantValue:
+                  stringValue: /kubeflow_persistent_volume/data/tfrecords
+            input_config:
+              runtimeValue:
+                constantValue:
+                  stringValue: "{\n  \"splits\": [\n    {\n      \"name\": \"single_split\"\
+                    ,\n      \"pattern\": \"*\"\n    }\n  ]\n}"
+            output_config:
+              runtimeValue:
+                constantValue:
+                  stringValue: "{\n  \"split_config\": {\n    \"splits\": [\n    \
+                    \  {\n        \"hash_buckets\": 6,\n        \"name\": \"train\"\
+                    \n      },\n      {\n        \"hash_buckets\": 6,\n        \"\
+                    name\": \"eval\"\n      },\n      {\n        \"hash_buckets\"\
+                    : 6,\n        \"name\": \"test\"\n      }\n    ]\n  }\n}"
+            output_data_format:
+              runtimeValue:
+                constantValue:
+                  intValue: '6'
+            output_file_format:
+              runtimeValue:
+                constantValue:
+                  intValue: '5'
+        taskInfo:
+          name: ImportExampleGen
+      Pusher:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: Pusher
+        dependentTasks:
+        - HumanEvaluator
+        - Trainer
+        inputs:
+          artifacts:
+            model:
+              taskOutputArtifact:
+                outputArtifactKey: model
+                producerTask: Trainer
+            model_blessing:
+              taskOutputArtifact:
+                outputArtifactKey: human_evaluator_blessing
+                producerTask: HumanEvaluator
+          parameters:
+            custom_config:
+              runtimeValue:
+                constantValue:
+                  stringValue: 'null'
+            push_destination:
+              runtimeValue:
+                constantValue:
+                  stringValue: "{\n  \"filesystem\": {\n    \"base_directory\": \"\
+                    /kubeflow_persistent_volume/serving_model_dir\"\n  }\n}"
+        taskInfo:
+          name: Pusher
+      SchemaGen:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: SchemaGen
+        dependentTasks:
+        - StatisticsGen
+        inputs:
+          artifacts:
+            statistics:
+              taskOutputArtifact:
+                outputArtifactKey: statistics
+                producerTask: StatisticsGen
+          parameters:
+            exclude_splits:
+              runtimeValue:
+                constantValue:
+                  stringValue: '[]'
+            infer_feature_shape:
+              runtimeValue:
+                constantValue:
+                  intValue: '1'
+        taskInfo:
+          name: SchemaGen
+      SchemaUpdater:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: SchemaUpdater
+        dependentTasks:
+        - SchemaGen
+        inputs:
+          artifacts:
+            schema:
+              taskOutputArtifact:
+                outputArtifactKey: schema
+                producerTask: SchemaGen
+          parameters:
+            updating_params:
+              runtimeValue:
+                constantValue:
+                  stringValue: '[["text", 0.75]]'
+        taskInfo:
+          name: SchemaUpdater
+      StatisticsGen:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: StatisticsGen
+        dependentTasks:
+        - FeatureEngineeringComponent
+        inputs:
+          artifacts:
+            examples:
+              taskOutputArtifact:
+                outputArtifactKey: feature_engineered_examples
+                producerTask: FeatureEngineeringComponent
+          parameters:
+            exclude_splits:
+              runtimeValue:
+                constantValue:
+                  stringValue: '[]'
+        taskInfo:
+          name: StatisticsGen
+      Trainer:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: Trainer
+        dependentTasks:
+        - SchemaUpdater
+        - Transform
+        inputs:
+          artifacts:
+            examples:
+              taskOutputArtifact:
+                outputArtifactKey: transformed_examples
+                producerTask: Transform
+            schema:
+              taskOutputArtifact:
+                outputArtifactKey: updated_schema
+                producerTask: SchemaUpdater
+            transform_graph:
+              taskOutputArtifact:
+                outputArtifactKey: transform_graph
+                producerTask: Transform
+          parameters:
+            custom_config:
+              runtimeValue:
+                constantValue:
+                  stringValue: 'null'
+            eval_args:
+              runtimeValue:
+                constantValue:
+                  stringValue: "{\n  \"num_steps\": 1000\n}"
+            module_path:
+              runtimeValue:
+                constantValue:
+                  stringValue: training_module@/kubeflow_persistent_volume/pipeline_run_kubeflow/_wheels/tfx_user_code_Trainer-0.0+845e567ea009783acc58b9de6849dc61efab94b045efd49b1bcccf0671b1ddb1-py3-none-any.whl
+            train_args:
+              runtimeValue:
+                constantValue:
+                  stringValue: "{\n  \"num_steps\": 1000\n}"
+        taskInfo:
+          name: Trainer
+      Transform:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: Transform
+        dependentTasks:
+        - DataCleaner
+        - SchemaUpdater
+        inputs:
+          artifacts:
+            examples:
+              taskOutputArtifact:
+                outputArtifactKey: preprocessed_examples
+                producerTask: DataCleaner
+            schema:
+              taskOutputArtifact:
+                outputArtifactKey: updated_schema
+                producerTask: SchemaUpdater
+          parameters:
+            custom_config:
+              runtimeValue:
+                constantValue:
+                  stringValue: 'null'
+            disable_statistics:
+              runtimeValue:
+                constantValue:
+                  intValue: '0'
+            force_tf_compat_v1:
+              runtimeValue:
+                constantValue:
+                  intValue: '0'
+            module_path:
+              runtimeValue:
+                constantValue:
+                  stringValue: preprocessing_module@/kubeflow_persistent_volume/pipeline_run_kubeflow/_wheels/tfx_user_code_Transform-0.0+845e567ea009783acc58b9de6849dc61efab94b045efd49b1bcccf0671b1ddb1-py3-none-any.whl
+        taskInfo:
+          name: Transform
+schemaVersion: 2.1.0
+sdkVersion: tfx-1.21.0

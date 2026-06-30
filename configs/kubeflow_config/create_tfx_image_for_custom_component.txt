@@ -1,0 +1,47 @@
+## Creating TFX docker image for the custom components
+
+Step 1: Open the tfx docker image in interactive shell:
+```
+docker run --rm -it --entrypoint /bin/bash tensorflow/tfx:1.21.0
+
+```
+
+Step 2: Update the packages:
+```
+apt update
+
+```
+
+Step 3: Install the extra dependencies required by the Custom Components:
+```
+pip install pyspellchecker
+pip install email-reply-parser
+pip install python-dotenv
+
+```
+
+Step 4: Login to your Docker account:
+```
+docker login
+
+```
+
+Step 5: Commit the image:
+```
+
+docker commit <container_id> spiralmonster/tfx:news_authentication_pipeline
+
+```
+
+Step 6: Push the image to the Docker Hub:
+```
+docker push spiralmonster/tfx:news_authentication_pipeline
+
+```
+
+Step 7: Pull the created Docker image:
+```
+
+docker pull docker.io/spiralmonster/tfx:news_authentication_pipeline
+
+```

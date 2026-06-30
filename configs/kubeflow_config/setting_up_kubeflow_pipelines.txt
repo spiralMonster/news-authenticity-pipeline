@@ -1,0 +1,84 @@
+# Setting Up Kubeflow Pipelines:
+
+Step 1: Export the Pipeline version:
+```
+export PIPELINE_VERSION=2.16.1
+
+```
+
+Step 2: Initiating Kubeflow Pipelines:
+```
+kubectl apply -k "github.com/kubeflow/pipelines/manifests/kustomize/cluster-scoped-resources?ref=$PIPELINE_VERSION"
+kubectl wait --for=condition=established --timeout=60s crd/applications.app.k8s.io
+kubectl apply -k "github.com/kubeflow/pipelines/manifests/kustomize/env/dev?ref=$PIPELINE_VERSION"
+
+```
+
+Step 3: Check the Pods:
+```
+kubectl get pods -n kubeflow
+
+```
+
+Step 4: If there is a problem with the MySQL pod then the following things:
+i) Pull docker images of mysql:
+```
+docker pull mysql:8.4
+
+```
+
+ii) Load the image into Minikube:
+```
+minikube image load mysql:8.4
+
+```
+
+iii) Check whether minikube contains the image or not:
+```
+minikube ssh
+docker images | grep mysql
+exit
+
+```
+
+iv) If the image exists, then restart the MySQL pod:
+```
+kubectl delete pod -l app=mysql -n kubeflow
+
+```
+
+Step 5: Load the custom TFX image created into MiniKube:
+```
+minikube image load docker.io/spiralmonster/tfx:news_authentication_pipeline
+
+```
+
+Step 6: Mount the 'kubeflow_persistent_volume' folder into the VM running Minkube:
+```
+minikube mount $(pwd)/kubeflow_persistent_volume:/mnt/kubeflow-data
+
+```
+
+Step 7: Create the Persistent Volume and Persistent Volume Claim:
+```
+kubectl apply -f configs/kubeflow_config/persistent_volume.yaml
+kubectl apply -f configs/kubeflow_config/persistent_volume_claim.yaml
+
+```
+
+Step 8: If all pods are running, then
+create a port forward for accessing Kubeflow Pipelines UI:
+```
+kubectl port-forward -n kubeflow svc/ml-pipeline-ui 8080:80
+
+```
+
+
+Step 8: Import the "RunKubeflowPipeline" function from "pipelines/kubeflow_pipeline/run_pipeline.py" into main.py and run it.
+```
+python main.py
+
+```
+
+Step 9: Upload the generated 'news_authentication_pipeline.yaml' into the Kubeflow Pipeline UI and run the pipeline.
+

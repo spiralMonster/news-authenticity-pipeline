@@ -15,7 +15,7 @@ from components.custom_components.data_cleaner.build.data_cleaner_component impo
 def ModelEvaluator(
         example_gen:DataCleaner,
         model_trainer:Trainer,
-        model_resolver:Resolver,
+        model_resolver:Resolver|None,
         evaluation_config_path:str
 ):
     print(f"[{datetime.now()}] [START] Model Evaluator Component.")
@@ -91,13 +91,23 @@ def ModelEvaluator(
         ]
     )
 
-    model_evaluator=Evaluator(
-        examples=example_gen.outputs["preprocessed_examples"],
-        model=model_trainer.outputs["model"],
-        baseline_model=model_resolver.outputs["model"],
-        eval_config=eval_config,
-        example_splits=["test"]
-    )
+    if not model_resolver:
+        model_evaluator=Evaluator(
+            examples=example_gen.outputs["preprocessed_examples"],
+            model=model_trainer.outputs["model"],
+            eval_config=eval_config,
+            example_splits=["test"]
+        )
+
+    else:
+        model_evaluator = Evaluator(
+            examples=example_gen.outputs["preprocessed_examples"],
+            model=model_trainer.outputs["model"],
+            baseline_model=model_resolver.outputs["model"],
+            eval_config=eval_config,
+            example_splits=["test"]
+        )
+
 
     print(f"[{datetime.now()}] [END] Model Evaluator Component.")
 

@@ -1,0 +1,30 @@
+# Creating Kubernetes cluster:
+
+```
+minikube start \
+--driver=docker \
+--cpus=6 \
+--memory=12288 \
+--disk-size=40g \
+--kubernetes-version=v1.31.0
+
+```
+
+Commands to check, whether the cluster is created or not:
+```
+kubectl get nodes
+kubectl cluster-info
+
+```
+
+To stop the created cluster:
+```
+minikube stop
+
+```
+
+To delete the created cluster:
+```
+minikube delete
+
+```
