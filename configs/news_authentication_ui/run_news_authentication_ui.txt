@@ -1,0 +1,6 @@
+# Run News Authentication User Interface:
+
+```
+streamlit run news_authentication_user_interface.py
+
+```

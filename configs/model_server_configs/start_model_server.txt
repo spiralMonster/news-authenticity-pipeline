@@ -1,4 +1,4 @@
-### Steps to start docker container:
+# Steps to start model_server container:
 
 docker run \
 -p 8500:8500 \

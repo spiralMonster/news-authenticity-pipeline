@@ -1,3 +1,5 @@
+#Run Model Server with tensorflow-serving model optimizations.
+
 docker run \
 -p 8500:8500 \
 -p 8501:8501 \

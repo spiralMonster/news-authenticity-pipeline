@@ -1,0 +1,17 @@
+# Run News Authentication Pipeline with Apache Beam:
+```
+python run_news_authentication_pipeline.py --pipeline_orchestrator=apache_beam
+
+```
+
+# Run News Authentication Pipeline with Apache Airflow:
+```
+python run_news_authentication_pipeline.py --pipeline_orchestrator=apache_airflow
+
+```
+
+# Run News Authentication Pipeline with Kubeflow:
+```
+python run_news_authentication_pipeline.py --pipeline_orchestrator=kubeflow
+
+```

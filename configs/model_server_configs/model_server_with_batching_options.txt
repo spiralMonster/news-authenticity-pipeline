@@ -1,0 +1,11 @@
+#Run Model Server with Batching:
+
+docker run \
+-p 8500:8500 \
+-p 8501:8501 \
+--mount type=bind,source=$(pwd)/serving_model_dir,target=/models/news_authenticator \
+--mount type=bind,source=$(pwd)/configs/server_configs,target=/server_config \
+-e MODEL_NAME=news_authenticator \
+-t tensorflow/serving:2.17.0 \
+--enable_batching=true \
+--batching_parameters_file=/server_config/batching_config.txt

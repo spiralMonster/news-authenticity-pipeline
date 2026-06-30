@@ -34,4 +34,4 @@ if __name__=="__main__":
 
     result=MakePredictions(text=text)
 
-    print(result.json())
+    print(result)
