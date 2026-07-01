@@ -182,10 +182,11 @@ This serves as the entry point of the complete machine learning pipeline.
 
 ### Component Screenshot
 
+<p align="center">
 
 ![Data Ingestion](snippets/component_snippets/components/data_ingestion_comp.png)
 
-
+</p>
 ---
 
 ## 2. Feature Engineering (Custom Component)
@@ -214,7 +215,7 @@ These handcrafted features are later combined with textual embeddings inside the
 
 <p align="center">
 
-![Feature Engineering](snippets/feature_engineering.png)
+![Feature Engineering](snippets/component_snippets/components/feature_engineering_comp.png)
 
 </p>
 
@@ -243,7 +244,36 @@ These statistics help developers understand the characteristics of the dataset b
 
 <p align="center">
 
-![Statistics Generator](snippets/statistics_generator.png)
+![Statistics Generator](snippets/component_snippets/components/stat_gen_comp.png)
+
+
+</p>
+
+<p align="center">
+
+![Statistics Generator](snippets/component_snippets/statistics_generated1.png)
+
+
+</p>
+
+<p align="center">
+
+![Statistics Generator](snippets/component_snippets/statistics_generated2.png)
+
+
+</p>
+
+<p align="center">
+
+![Statistics Generator](snippets/component_snippets/statistics_generated3.png)
+
+
+</p>
+
+<p align="center">
+
+![Statistics Generator](snippets/component_snippets/statistics_generated4.png)
+
 
 </p>
 
@@ -268,9 +298,19 @@ The generated schema is later used for anomaly detection.
 
 <p align="center">
 
-![Schema Generator](snippets/schema_generator.png)
+![Schema Generator](snippets/component_snippets/components/schema_gen_comp.png)
+
 
 </p>
+
+<p align="center">
+
+![Schema Generator](snippets/component_snippets/schema_generated.png)
+
+
+</p>
+
+
 
 ---
 
@@ -294,9 +334,11 @@ This provides complete flexibility while keeping the remaining pipeline automate
 
 <p align="center">
 
-![Schema Updater](snippets/schema_updater.png)
+![Schema Updater](snippets/component_snippets/components/updated_schema_gen_comp.png)
 
 </p>
+
+---
 
 
 ## 6. Example Validator
@@ -320,7 +362,7 @@ By identifying anomalies early in the pipeline, invalid data is prevented from p
 
 <p align="center">
 
-![Example Validator](snippets/example_validator.png)
+![Example Validator](snippets/component_snippets/components/example_validator_comp.png)
 
 </p>
 
@@ -346,7 +388,7 @@ This ensures that the training pipeline operates on high-quality data.
 
 <p align="center">
 
-![Data Cleaner](snippets/data_cleaner.png)
+![Data Cleaner](snippets/component_snippets/components/data_cleaner_comp.png)
 
 </p>
 
@@ -392,7 +434,7 @@ As a result, the pipeline completely eliminates **training-serving skew**, ensur
 
 <p align="center">
 
-![Data Transformer](snippets/data_transformer.png)
+![Data Transformer](snippets/component_snippets/components/data_transform_comp.png)
 
 </p>
 
@@ -417,7 +459,7 @@ This hybrid architecture enables the model to leverage both linguistic patterns 
 
 <p align="center">
 
-![Model Trainer](snippets/model_trainer.png)
+![Model Trainer](snippets/component_snippets/components/model_trainer_comp.png)
 
 </p>
 
@@ -470,7 +512,7 @@ These features are passed through a Dense Neural Network that learns higher-leve
 
 <p align="center">
 
-![Numerical Network](snippets/numerical_network.png)
+![Numerical Network](snippets/model_architecture_snippets/numerical_feature_processing_network.png)
 
 </p>
 
@@ -494,7 +536,7 @@ Together, these components enable the model to capture information at multiple s
 
 <p align="center">
 
-![Text Processing Network](snippets/text_processing_network.png)
+![Text Processing Network](snippets/model_architecture_snippets/text_processing_network.png)
 
 </p>
 
@@ -516,7 +558,7 @@ This layer extracts semantic information from textual inputs before passing the 
 
 <p align="center">
 
-![Basic Text Processing Layer](snippets/basic_text_processing_layer.png)
+![Basic Text Processing Layer](snippets/model_architecture_snippets/basic_text_processing_layer.png)
 
 </p>
 
@@ -536,7 +578,7 @@ This enables the model to learn information from multiple receptive fields inste
 
 <p align="center">
 
-![Input Divider Layer](snippets/input_divider_layer.png)
+![Input Divider Layer](snippets/model_architecture_snippets/input_divider_layer.png)
 
 </p>
 
@@ -556,7 +598,7 @@ This architecture allows the model to capture both local and long-range dependen
 
 <p align="center">
 
-![Multi LSTM Layer](snippets/multi_lstm_layer.png)
+![Multi LSTM Layer](snippets/model_architecture_snippets/multi_lstm_layer.png)
 
 </p>
 
@@ -572,9 +614,16 @@ This hybrid architecture improves the model's ability to identify fake news by u
 
 <p align="center">
 
-![Complete Model Architecture](snippets/model_architecture.png)
+![Complete Model Architecture](snippets/model_architecture_snippets/news_authentication_model_architecture.png)
 
 </p>
+
+<p align="center">
+
+![Complete Model Architecture](snippets/model_architecture_snippets/news_authentication_model_summary.png)
+
+</p>
+
 
 ---
 
@@ -590,7 +639,7 @@ This enables continuous improvement while ensuring that only superior models are
 
 <p align="center">
 
-![Model Resolver](snippets/model_resolver.png)
+![Model Resolver](snippets/component_snippets/components/model_resolver_comp.png)
 
 </p>
 
@@ -617,7 +666,7 @@ Only if the newly trained model outperforms the existing production model is it 
 
 <p align="center">
 
-![Model Evaluator](snippets/model_evaluator.png)
+![Model Evaluator](snippets/component_snippets/components/model_evaluator_comp.png)
 
 </p>
 
@@ -657,7 +706,19 @@ This component demonstrates how human-in-the-loop validation can be integrated i
 
 <p align="center">
 
-![Human Evaluator](snippets/human_evaluator.png)
+![Human Evaluator](snippets/component_snippets/components/human_evaluator_comp.png)
+
+</p>
+
+<p align="center">
+
+![Human Evaluator](snippets/component_snippets/human_evaluator_component_demo_email1.png)
+
+</p>
+
+<p align="center">
+
+![Human Evaluator](snippets/component_snippets/human_evaluator_component_demo_email2.png)
 
 </p>
 
@@ -680,7 +741,7 @@ This model can then be loaded automatically by TensorFlow Serving for online inf
 
 <p align="center">
 
-![Model Pusher](snippets/model_pusher.png)
+![Model Pusher](snippets/component_snippets/components/model_pusher_comp.png)
 
 </p>
 
@@ -719,13 +780,6 @@ REST API   gRPC API
 Predictions
 ```
 
-### Deployment Screenshot
-
-<p align="center">
-
-![TensorFlow Serving](snippets/tensorflow_serving.png)
-
-</p>
 
 ---
 
@@ -785,13 +839,6 @@ making_prediction_from_model_server/
 └── via_rest_api/
 ```
 
-### REST Prediction Screenshot
-
-<p align="center">
-
-![REST API](snippets/rest_prediction.png)
-
-</p>
 
 ---
 
@@ -832,14 +879,6 @@ making_prediction_from_model_server/
 └── via_grpc/
 ```
 
-### gRPC Screenshot
-
-<p align="center">
-
-![gRPC Prediction](snippets/grpc_prediction.png)
-
-</p>
-
 ---
 
 # 📊 TensorBoard
@@ -865,7 +904,13 @@ Using TensorBoard, developers can monitor the training process in real time and 
 
 <p align="center">
 
-![TensorBoard](snippets/tensorboard.png)
+![TensorBoard](snippets/tensorboard_snippets/model_training1.png)
+
+</p>
+
+<p align="center">
+
+![TensorBoard](snippets/tensorboard_snippets/model_training2.png)
 
 </p>
 
@@ -905,7 +950,25 @@ Runtime Metrics
 
 <p align="center">
 
-![Prometheus](snippets/prometheus.png)
+![Prometheus](snippets/prometheus_snippets/prometheus1.png)
+
+</p>
+
+<p align="center">
+
+![Prometheus](snippets/prometheus_snippets/prometheus2.png)
+
+</p>
+
+<p align="center">
+
+![Prometheus](snippets/prometheus_snippets/prometheus4.png)
+
+</p>
+
+<p align="center">
+
+![Prometheus](snippets/prometheus_snippets/prometheus5.png)
 
 </p>
 
@@ -942,13 +1005,6 @@ Pipeline execution artifacts are stored inside:
 pipeline_run_beam/
 ```
 
-### Apache Beam Screenshot
-
-<p align="center">
-
-![Apache Beam](snippets/apache_beam.png)
-
-</p>
 
 ---
 
@@ -1065,9 +1121,72 @@ Open the Airflow dashboard in your browser.
 
 <p align="center">
 
-![Airflow](snippets/airflow.png)
+![Airflow](snippets/airflow_snippets/airflow4.png)
 
 </p>
+
+<p align="center">
+
+![Airflow](snippets/airflow_snippets/airflow5.png)
+
+</p>
+
+<p align="center">
+
+![Airflow](snippets/airflow_snippets/airflow6.png)
+
+</p>
+
+<p align="center">
+
+![Airflow](snippets/airflow_snippets/airflow12.png)
+
+</p>
+
+<p align="center">
+
+![Airflow](snippets/airflow_snippets/airflow9.png)
+
+</p>
+
+<p align="center">
+
+![Airflow](snippets/airflow_snippets/airflow11.png)
+
+</p>
+
+<p align="center">
+
+![Airflow](snippets/airflow_snippets/airflow13.png)
+
+</p>
+
+<p align="center">
+
+![Airflow](snippets/airflow_snippets/airflow14.png)
+
+</p>
+
+<p align="center">
+
+![Airflow](snippets/airflow_snippets/airflow30.png)
+
+</p>
+
+<p align="center">
+
+![Airflow](snippets/airflow_snippets/airflow32.png)
+
+</p>
+
+<p align="center">
+
+![Airflow](snippets/airflow_snippets/airflow33.png)
+
+</p>
+
+
+
 
 ---
 
@@ -1206,7 +1325,37 @@ through the Kubeflow Pipeline UI and execute the pipeline.
 
 <p align="center">
 
-![Kubeflow](snippets/kubeflow.png)
+![Kubeflow](snippets/kubeflow_snippets/kubeflow_pipelines1.png)
+
+</p>
+
+<p align="center">
+
+![Kubeflow](snippets/kubeflow_snippets/kubeflow_pipelines2.png)
+
+</p>
+
+<p align="center">
+
+![Kubeflow](snippets/kubeflow_snippets/kubeflow_pipelines3.png)
+
+</p>
+
+<p align="center">
+
+![Kubeflow](snippets/kubeflow_snippets/kubeflow_pipelines8.png)
+
+</p>
+
+<p align="center">
+
+![Kubeflow](snippets/kubeflow_snippets/kubeflow_pipelines9.png)
+
+</p>
+
+<p align="center">
+
+![Kubeflow](snippets/kubeflow_snippets/kubeflow_pipelines10.png)
 
 </p>
 
@@ -1260,7 +1409,25 @@ Collect User Feedback
 
 <p align="center">
 
-![Streamlit UI](snippets/streamlit_ui.png)
+![Streamlit UI](snippets/news_authentication_ui_snippets/news_authentication_ui1.png)
+
+</p>
+
+<p align="center">
+
+![Streamlit UI](snippets/news_authentication_ui_snippets/news_authentication_ui2.png)
+
+</p>
+
+<p align="center">
+
+![Streamlit UI](snippets/news_authentication_ui_snippets/news_authentication_ui3.png)
+
+</p>
+
+<p align="center">
+
+![Streamlit UI](snippets/news_authentication_ui_snippets/news_authentication_ui4.png)
 
 </p>
 
@@ -1301,13 +1468,6 @@ Future Pipeline Runs
 Improved Model
 ```
 
-### Feedback Screenshot
-
-<p align="center">
-
-![Feedback](snippets/user_feedback.png)
-
-</p>
 
 ---
 
@@ -1454,7 +1614,7 @@ pip install -r requirements.txt
 Execute the pipeline using:
 
 ```bash
-python main.py
+python run_news_authentication_pipeline.py --pipeline_orchestrator=apache_beam
 ```
 
 Depending on the selected orchestration backend, the pipeline can be executed using:
@@ -1514,40 +1674,6 @@ The corresponding client implementations are available in the `making_prediction
 
 ---
 
-# 🚀 Future Improvements
-
-Some possible future enhancements include:
-
-- Integration with Grafana dashboards
-- Automated CI/CD pipeline for model deployment
-- Canary deployments for safer model rollouts
-- A/B testing support
-- Automated retraining triggered by feedback volume
-- Model registry integration
-- Cloud-native deployment on managed Kubernetes services
-- Distributed training support
-- Explainable AI (XAI) visualizations
-- Multi-language news authentication
-- Transformer-based architectures (e.g., BERT, RoBERTa, DistilBERT)
-- Support for additional serving platforms such as KServe
-
----
-
-# 🤝 Contributing
-
-Contributions are welcome!
-
-If you have suggestions for improving the project, feel free to:
-
-1. Fork the repository
-2. Create a new feature branch
-3. Commit your changes
-4. Push the branch
-5. Open a Pull Request
-
-Please ensure that your contributions are well documented and include appropriate tests wherever applicable.
-
----
 
 # 📜 License
 
@@ -1583,10 +1709,26 @@ Your support helps motivate further development and encourages the sharing of op
 
 ---
 
+# 👨‍💻 Author
+
+## Amartya Pawar (spiralMonster)
+
+AI Engineer | Machine Learning Engineer | MLOps Enthusiast
+
+I am passionate about building production-grade Machine Learning systems and exploring the intersection of Artificial Intelligence, Deep Learning, Large Language Models, and MLOps.
+
+This project was developed to demonstrate how an end-to-end machine learning system can be built using TensorFlow Extended (TFX), custom pipeline components, modern orchestration frameworks, and production deployment tools.
+
+
+---
+
 <p align="center">
 
-**Built with ❤️ using TensorFlow Extended (TFX), TensorFlow Serving, Apache Beam, Apache Airflow, Kubeflow Pipelines, and Streamlit.**
+**Built with ❤️ using Tensorflow, TensorFlow Extended (TFX), TensorFlow Serving, Docker, Apache Beam, Apache Airflow, Kubeflow Pipelines, and Streamlit.**
 
 </p>
+
+
+
 
 

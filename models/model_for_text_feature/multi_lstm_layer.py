@@ -79,7 +79,7 @@ class MultiLSTMLayer(Layer):
 
     def compute_output_shape(self,input_shape):
         last_dim=self.dense_layer_config[-1]["units"]
-        shape=(input_shape[0],last_dim)
+        shape=(input_shape[0][0],last_dim)
 
         return shape
 
