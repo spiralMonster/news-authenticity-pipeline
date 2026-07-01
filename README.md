@@ -36,10 +36,15 @@
 - Streamlit User Interface
 - Continuous Feedback Loop
 - Project Structure
+- Directory Overview
 - Installation
-- Running the Project
-- Future Improvements
+- Running the Pipeline
+- Running the Streamlit Application
+- Model Serving
+- Technologies Used
 - License
+- Acknowledgements
+- Author Note
 
 ---
 
@@ -1701,13 +1706,7 @@ Special thanks to the communities behind these technologies for making productio
 
 ---
 
-# ⭐ If You Found This Project Helpful
 
-If you found this repository useful or learned something from it, consider giving it a ⭐ on GitHub.
-
-Your support helps motivate further development and encourages the sharing of open-source MLOps projects.
-
----
 
 # 👨‍💻 Author
 
@@ -1719,6 +1718,14 @@ I am passionate about building production-grade Machine Learning systems and exp
 
 This project was developed to demonstrate how an end-to-end machine learning system can be built using TensorFlow Extended (TFX), custom pipeline components, modern orchestration frameworks, and production deployment tools.
 
+
+---
+
+# ⭐ If You Found This Project Helpful
+
+If you found this repository useful or learned something from it, consider giving it a ⭐ on GitHub.
+
+Your support helps motivate further development and encourages the sharing of open-source MLOps projects.
 
 ---
 
